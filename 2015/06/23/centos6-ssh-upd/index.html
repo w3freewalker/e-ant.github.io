@@ -21,15 +21,21 @@
     var CONFIG = {"hostname":"blog.e-ant.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="一只蚂蚁">
-<meta property="og:url" content="http://blog.e-ant.cn/tags/%E6%B3%A8%E5%86%8C%E7%A0%81/index.html">
+  <meta name="description" content="注意：  以下方案在centos6(查看方法：cat &#x2F;etc&#x2F;issue)版本下测试成功，其它版本未验证，谨慎操作。 建议直接在~目录下操作 务必严格按照下述步骤逐步执行 保险起见，以下升级步骤全部完成后，修改一次root密码，改成原来的密码 版本升级后，可以重启下服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSH升级方案【基于CentOS6版本】">
+<meta property="og:url" content="http://blog.e-ant.cn/2015/06/23/centos6-ssh-upd/index.html">
 <meta property="og:site_name" content="一只蚂蚁">
+<meta property="og:description" content="注意：  以下方案在centos6(查看方法：cat &#x2F;etc&#x2F;issue)版本下测试成功，其它版本未验证，谨慎操作。 建议直接在~目录下操作 务必严格按照下述步骤逐步执行 保险起见，以下升级步骤全部完成后，修改一次root密码，改成原来的密码 版本升级后，可以重启下服务器">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-06-23T04:55:00.000Z">
+<meta property="article:modified_time" content="2020-04-24T13:53:46.816Z">
 <meta property="article:author" content="一只蚂蚁">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="ssh升级">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://blog.e-ant.cn/tags/%E6%B3%A8%E5%86%8C%E7%A0%81/">
+<link rel="canonical" href="http://blog.e-ant.cn/2015/06/23/centos6-ssh-upd/">
 
 
 <script id="page-configurations">
@@ -37,12 +43,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: 注册码 | 一只蚂蚁</title>
+  <title>SSH升级方案【基于CentOS6版本】 | 一只蚂蚁</title>
   
 
 
@@ -150,51 +156,126 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">注册码
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.e-ant.cn/2015/06/23/centos6-ssh-upd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="一只蚂蚁">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只蚂蚁">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SSH升级方案【基于CentOS6版本】
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-06-23 12:55:00" itemprop="dateCreated datePublished" datetime="2015-06-23T12:55:00+08:00">2015-06-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-24 21:53:46" itemprop="dateModified" datetime="2020-04-24T21:53:46+08:00">2020-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SSH/" itemprop="url" rel="index"><span itemprop="name">SSH</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2009</span>
+        <blockquote>
+<p><strong>注意：</strong></p>
+<ol>
+<li><strong>以下方案在centos6(查看方法：cat /etc/issue)版本下测试成功，其它版本未验证，谨慎操作。</strong></li>
+<li><strong>建议直接在~目录下操作</strong></li>
+<li><strong>务必严格按照下述步骤逐步执行</strong></li>
+<li><strong>保险起见，以下升级步骤全部完成后，修改一次root密码，改成原来的密码</strong></li>
+<li><strong>版本升级后，可以重启下服务器</strong></li>
+</ol>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="升级步骤"><a href="#升级步骤" class="headerlink" title="升级步骤"></a>升级步骤</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cp -rf /etc/ssh /etc/ssh_bak</span><br><span class="line"><span class="meta">#</span><span class="bash"> 以下语句,若出现提示信息时,全部选y</span></span><br><span class="line">yum install gcc openssl-devel pam-devel rpm-build</span><br><span class="line">wget http://mirror.internode.on.net/pub/OpenBSD/OpenSSH/portable/openssh-7.2p2.tar.gz</span><br><span class="line">tar -zxvf openssh-7.2p2.tar.gz</span><br><span class="line">cd openssh-7.2p2</span><br><span class="line">./configure --prefix=/usr --sysconfdir=/etc/ssh --with-pam --with-zlib --with-md5-passwords</span><br><span class="line">rm -rf /etc/ssh</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"><span class="meta">#</span><span class="bash"> 出现提示信息,选y</span></span><br><span class="line">cp contrib/redhat/sshd.init /etc/init.d/sshd</span><br></pre></td></tr></table></figure>
+
+<p>接着：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p>查找<code>PermitRootLogin</code>，改成<code>PermitRootLogin yes</code>  </p>
+<p>查找<code>#UsePAM no</code>，改成<code>UsePAM yes</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/sshd reload</span><br><span class="line">chkconfig --list|grep ssh</span><br></pre></td></tr></table></figure>
+
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2009-08-23T03:55:00+08:00"
-              content="2009-08-23">
-          08-23
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+              <a href="/tags/ssh%E5%8D%87%E7%BA%A7/" rel="tag"># ssh升级</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2009/08/23/sncode/" itemprop="url">
-            <span itemprop="name">常用的注册码及序列号</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2009/09/17/excel01/" rel="prev" title="excel中从文件路径取文件名的快捷处理方案">
+      <i class="fa fa-chevron-left"></i> excel中从文件路径取文件名的快捷处理方案
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/02/15/nexus-update/" rel="next" title="Sonatype Nexus版本库升级方案">
+      Sonatype Nexus版本库升级方案 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -247,6 +328,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#升级步骤"><span class="nav-number">1.</span> <span class="nav-text">升级步骤</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
