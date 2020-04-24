@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.e-ant.cn","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在自已平时开发过程中很，经常需要做一些非常繁琐的事情，比如编写操作手册。操作手册有多种格式，我最经常见格式的就是pdf、chm或htm等。这里只针对htm作一些优化。 通常Microsoft office本身有提供word转换成html文件的功能，不过无法进行批次转换,效率上不高。这里推荐使用doctohtml.exe这款工具，需要download的可以参考这里doc2Html.exe.。 这款工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DIY一款比较好用的批量转换工具【doc2HtmlTider】">
+<meta property="og:url" content="http://blog.e-ant.cn/2009/08/23/doc2HtmlTider/index.html">
+<meta property="og:site_name" content="一只蚂蚁">
+<meta property="og:description" content="在自已平时开发过程中很，经常需要做一些非常繁琐的事情，比如编写操作手册。操作手册有多种格式，我最经常见格式的就是pdf、chm或htm等。这里只针对htm作一些优化。 通常Microsoft office本身有提供word转换成html文件的功能，不过无法进行批次转换,效率上不高。这里推荐使用doctohtml.exe这款工具，需要download的可以参考这里doc2Html.exe.。 这款工">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.e-ant.cn/2009/08/23/images/docHtmlTider.jpg">
+<meta property="article:published_time" content="2009-08-23T10:35:00.000Z">
+<meta property="article:modified_time" content="2020-04-24T10:07:20.415Z">
+<meta property="article:author" content="一只蚂蚁">
+<meta property="article:tag" content="批量转换">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.e-ant.cn/2009/08/23/images/docHtmlTider.jpg">
+
+<link rel="canonical" href="http://blog.e-ant.cn/2009/08/23/doc2HtmlTider/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>DIY一款比较好用的批量转换工具【doc2HtmlTider】 | 一只蚂蚁</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">一只蚂蚁</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.e-ant.cn/2009/08/23/doc2HtmlTider/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="一只蚂蚁">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只蚂蚁">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DIY一款比较好用的批量转换工具【doc2HtmlTider】
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2009-08-23 18:35:00" itemprop="dateCreated datePublished" datetime="2009-08-23T18:35:00+08:00">2009-08-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-24 18:07:20" itemprop="dateModified" datetime="2020-04-24T18:07:20+08:00">2020-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">常用工具</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在自已平时开发过程中很，经常需要做一些非常繁琐的事情，比如编写操作手册。操作手册有多种格式，我最经常见格式的就是pdf、chm或htm等。这里只针对htm作一些优化。</p>
+<p>通常Microsoft office本身有提供word转换成html文件的功能，不过无法进行批次转换,效率上不高。这里推荐使用doctohtml.exe这款工具，需要download的可以参考这里<a href="http://www.onlinedown.net/soft/77339.htm" target="_blank" rel="noopener">doc2Html.exe</a>.。</p>
+<p>这款工具软件的优点是替换速度快，但是产生出来的html文件又臭又长，整合后整个操作手册变得非常大。想想还是自已动手丰衣足食，于是我花了点时间写了个简单的优化工具。经测试，用它可以将产生后的文件缩减至原来的60%左右。效果还是看得见的。</p>
+<a id="more"></a>
+
+<p><strong>在Visual Studio 2005中</strong></p>
+<ol>
+<li>先新建一个WinForm工程,打开Form1.cs,先在view画面上拉两个textbox元件,三个按钮元件,两个label标签</li>
+<li>第一个textbox元件textbox1用来取得待替换文件夹路径,配上一个label标签Lable1”待替换文件夹”作为说明,第二个textbox元件textbox2作为替换进度列表显示,设置为Multiline模式,配上另一个Label标签Label2”替换进度”作为说明;另外,三个按钮元件:第一个按钮Button1用来开启文件夹浏览器,第二个按钮Button2用来执行替换动作,第三个按钮Button3用来关闭窗体.Form1.cs[Design]画面结果如下图所示:</li>
+</ol>
+<img src='../images/docHtmlTider.jpg'/>
+
+
+
+<ol start="3">
+<li><p>然后将其切换至code页面,编辑代码如下: </p>
+<p> Form1.cs</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * &lt;P&gt; Title: 常用工具包                   	     &lt;&#x2F;P&gt;	</span><br><span class="line"> * &lt;P&gt; Description: htm标签清理工具                &lt;P&gt;	</span><br><span class="line"> * &lt;P&gt; Copyright: Copyright (c) 2009-05-04	&lt;&#x2F;P&gt;	</span><br><span class="line"> * @author 一只蚂蚁</span><br><span class="line"> * @version 0.1 Original Design from design document.	</span><br><span class="line"> *&#x2F;</span><br><span class="line">using System;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line">using System.ComponentModel;</span><br><span class="line">using System.Data;</span><br><span class="line">using System.Drawing;</span><br><span class="line">using System.Text;</span><br><span class="line">using System.Windows.Forms;</span><br><span class="line">using System.IO;</span><br><span class="line">using System.Collections;</span><br><span class="line">using System.Text.RegularExpressions;</span><br><span class="line"></span><br><span class="line">namespace HtmlTidier</span><br><span class="line">&#123;</span><br><span class="line">    public partial class Form1 : Form</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 建构方法</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        public Form1()</span><br><span class="line">        &#123;            </span><br><span class="line">            InitializeComponent();</span><br><span class="line">            &#x2F;&#x2F;readonly</span><br><span class="line">            this.textBox1.ReadOnly &#x3D; true;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;待替换文件夾</span><br><span class="line">        private string _folder;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 取得待替换文件夹路径</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;sender&quot;&gt;按钮物件&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;e&quot;&gt;事件&lt;&#x2F;param&gt;</span><br><span class="line">        private void button1_Click(object sender, EventArgs e)</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F;开启文件夹浏览器</span><br><span class="line">            FolderBrowserDialog path &#x3D; new FolderBrowserDialog();</span><br><span class="line">            path.ShowDialog();</span><br><span class="line">            this.textBox1.Text &#x3D; path.SelectedPath;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 执行替换</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        public void doReplace()</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F;刪除所有png档案</span><br><span class="line">            string[] fileLists &#x3D; Directory.GetFiles(_folder, @&quot;*.png&quot;, SearchOption.AllDirectories);           </span><br><span class="line">            foreach ( string newFile in fileLists )</span><br><span class="line">            &#123;</span><br><span class="line">                &#x2F;&#x2F;执行</span><br><span class="line">                File.Delete(newFile);</span><br><span class="line">                doShow(newFile, &quot;已删除!&quot;);</span><br><span class="line">                &#x2F;&#x2F;updata panel</span><br><span class="line">                this.Update();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;删除fileList.xml中的png图片结点</span><br><span class="line">            fileLists &#x3D; Directory.GetFiles(_folder, @&quot;*.xml&quot;, SearchOption.AllDirectories);</span><br><span class="line">            foreach ( string newFile in fileLists )</span><br><span class="line">            &#123;</span><br><span class="line">                string s &#x3D; ReadFile(newFile);</span><br><span class="line">                WriteFile(newFile, doXMLReplace(s));</span><br><span class="line">                doShow(newFile, &quot;已替换完成!&quot;);</span><br><span class="line">                &#x2F;&#x2F;update panel</span><br><span class="line">                this.Update();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;清理htm文件</span><br><span class="line">            fileLists &#x3D; Directory.GetFiles(_folder, @&quot;*.htm&quot;, SearchOption.AllDirectories);</span><br><span class="line">            foreach ( string newFile in fileLists )</span><br><span class="line">            &#123;</span><br><span class="line">                string s &#x3D; ReadFile(newFile);</span><br><span class="line">                WriteFile(newFile, doHtmlReplace(s));</span><br><span class="line">                doShow(newFile, &quot;已替换完成!&quot;);</span><br><span class="line">                &#x2F;&#x2F;update panel</span><br><span class="line">                this.Update();</span><br><span class="line">            &#125;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 实时显示</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;_path&quot;&gt;文件路径&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;mess&quot;&gt;提示信息&lt;&#x2F;param&gt;</span><br><span class="line">        public void doShow(string _path,string mess)</span><br><span class="line">        &#123;</span><br><span class="line">            this.textBox2.Text &#x3D; _path + mess + &quot;&#x2F;r&#x2F;n&quot; + this.textBox2.Text;</span><br><span class="line">            this.textBox2.ScrollToCaret();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 执行替换动作</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;sender&quot;&gt;按钮物件&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;e&quot;&gt;事件&lt;&#x2F;param&gt;</span><br><span class="line">        private void button2_Click(object sender, EventArgs e)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            _folder &#x3D; this.textBox1.Text;</span><br><span class="line">            &#x2F;&#x2F;文件夾為空</span><br><span class="line">            if ( string.IsNullOrEmpty(_folder) )</span><br><span class="line">            &#123;</span><br><span class="line">                MessageBox.Show(&quot;请选择待替换文件夹!&quot;, &quot;提示!&quot;);</span><br><span class="line">                return;</span><br><span class="line">            &#125;              </span><br><span class="line">            &#x2F;&#x2F;替換</span><br><span class="line">            doReplace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; htm标签替换</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;s&quot;&gt;待替换的内容&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;returns&gt;替换后的内容&lt;&#x2F;returns&gt;</span><br><span class="line">        public string doHtmlReplace(string s)</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F;s &#x3D; s.Replace(&quot;待處理表單操作手冊&quot;, &quot;&quot;);</span><br><span class="line">            s &#x3D; Regex.Replace(s, @&quot;&lt;!--&#x2F;[if gte vml 1&#x2F;][^!]+&lt;!&#x2F;[endif&#x2F;]--&gt;&quot;, &quot;&quot;);</span><br><span class="line">            s &#x3D; Regex.Replace(s, @&quot;&lt;!&#x2F;[if !vml&#x2F;]&gt;&quot;, &quot;&quot;);            </span><br><span class="line">            s &#x3D; Regex.Replace(s, @&quot;&#x2F;&quot;&quot;&gt;&lt;!&#x2F;[endif&#x2F;]&gt;&quot;, &quot;&#x2F;&quot;&gt;&quot;);</span><br><span class="line">            return s;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; fileList.xml替换</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;s&quot;&gt;待替换的内容&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;returns&gt;替换后的内容&lt;&#x2F;returns&gt;</span><br><span class="line">        public string doXMLReplace(string s)</span><br><span class="line">        &#123;</span><br><span class="line">            return Regex.Replace(s, @&quot;&lt;o:File[^&gt;]+png[^&gt;]+&gt;&#x2F;s+&quot;, &quot;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 关闭窗口</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;sender&quot;&gt;按钮物件&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;e&quot;&gt;事件&lt;&#x2F;param&gt;</span><br><span class="line">        private void button3_Click(object sender, EventArgs e)</span><br><span class="line">        &#123;</span><br><span class="line">            this.Close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 读文件</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;Path&quot;&gt;文件路径&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;returns&gt;文件内容&lt;&#x2F;returns&gt;</span><br><span class="line">        private string ReadFile(string _path)</span><br><span class="line">        &#123;</span><br><span class="line">            string s &#x3D; &quot;&quot;;</span><br><span class="line">            &#x2F;&#x2F;不存在</span><br><span class="line">            if ( !File.Exists(_path) )</span><br><span class="line">            &#123;</span><br><span class="line">                s &#x3D; &quot;不存在相应的目录&quot;;</span><br><span class="line">            &#125;            </span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                StreamReader f2 &#x3D; new StreamReader(_path, Encoding.GetEncoding(&quot;big5&quot;));</span><br><span class="line">                s &#x3D; f2.ReadToEnd();</span><br><span class="line">                f2.Close();</span><br><span class="line">                f2.Dispose();</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;返回</span><br><span class="line">            return s;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 写文件</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;Path&quot;&gt;文件路径&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;Strings&quot;&gt;文件内容&lt;&#x2F;param&gt;</span><br><span class="line">        private void WriteFile(string _path, string content)</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F;不存在</span><br><span class="line">            if ( !File.Exists(_path) )</span><br><span class="line">            &#123;</span><br><span class="line">                FileStream f &#x3D; File.Create(_path);</span><br><span class="line">                f.Close();</span><br><span class="line">                f.Dispose();</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;StreamWriter</span><br><span class="line">            StreamWriter f2 &#x3D; new StreamWriter(_path, false, Encoding.GetEncoding(&quot;big5&quot;));</span><br><span class="line">            f2.WriteLine(content);</span><br><span class="line">            f2.Close();</span><br><span class="line">            f2.Dispose();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>编译=&gt;运行….bingo!!!</strong> </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%89%B9%E9%87%8F%E8%BD%AC%E6%8D%A2/" rel="tag"># 批量转换</a>
+              <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"># 工具</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2009/08/23/sncode/" rel="prev" title="常用的注册码及序列号">
+      <i class="fa fa-chevron-left"></i> 常用的注册码及序列号
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2009/09/17/excel01/" rel="next" title="excel中从文件路径取文件名的快捷处理方案">
+      excel中从文件路径取文件名的快捷处理方案 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">一只蚂蚁</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/w3freewalker" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;w3freewalker" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:285640485@qq.com" title="E-Mail → mailto:285640485@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://www.fontawesome.com.cn/" title="http:&#x2F;&#x2F;www.fontawesome.com.cn&#x2F;" rel="noopener" target="_blank">Font Awesone中文网</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://hexo.io/plugins/" title="https:&#x2F;&#x2F;hexo.io&#x2F;plugins&#x2F;" rel="noopener" target="_blank">Hexo插件</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2009 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一只蚂蚁</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
