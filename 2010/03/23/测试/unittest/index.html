@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>相对完整的软件测试工具手册 | 蚂蚁窝</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="工具,软件测试" />
+    
+    <meta name="description" content="本文转载自 http:&#x2F;&#x2F;spaces.msn.com&#x2F;cdyblog&#x2F; 【侵删】  1. 从测试功能上分（1） 单元测试针对不同语言，如JUNIT（2） 功级测试E—Test：功能强大，由于不是采用POST URL的方式回放脚本，所以可以支持多内码的测试数据（当然要程序支持），基本上可以应付大部分的WEB SITE。MI公司的WINRUNNERCOMPUWARE的QARUNRATIONAL的S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="相对完整的软件测试工具手册">
+<meta property="og:url" content="http://blog.e-ant.cn/2010/03/23/%E6%B5%8B%E8%AF%95/unittest/index.html">
+<meta property="og:site_name" content="蚂蚁窝">
+<meta property="og:description" content="本文转载自 http:&#x2F;&#x2F;spaces.msn.com&#x2F;cdyblog&#x2F; 【侵删】  1. 从测试功能上分（1） 单元测试针对不同语言，如JUNIT（2） 功级测试E—Test：功能强大，由于不是采用POST URL的方式回放脚本，所以可以支持多内码的测试数据（当然要程序支持），基本上可以应付大部分的WEB SITE。MI公司的WINRUNNERCOMPUWARE的QARUNRATIONAL的S">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2010-03-23T11:05:00.000Z">
+<meta property="article:modified_time" content="2020-04-26T09:55:22.412Z">
+<meta property="article:author" content="一只蚂蚁">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="软件测试">
+<meta name="twitter:card" content="summary">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">行走无间、自在心间。</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+
+                                </li>
+                                    
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/Linux%E7%B3%BB%E7%BB%9F/">Linux系统</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/Maven%E7%A7%81%E6%9C%8D/">Maven私服</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%89%8D%E7%AB%AF/">前端</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/tools/index.html">实用小工具</a>
+                                </li>
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/games/index.html">放松一下</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-测试/unittest" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        相对完整的软件测试工具手册
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+      <i class="fa fa-calendar"></i>
+      <a href="/2010/03/23/%E6%B5%8B%E8%AF%95/unittest/" class="article-date">
+         <time datetime="2010-03-23T11:05:00.000Z" itemprop="datePublished">2010-03-23</time>
+      </a>
+    </div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a>, <a class="tag-link" href="/tags/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/" rel="tag">软件测试</a>
+    </div>
+
+                
+
+                
+   <div class="article-counter">
+      <i class="fa fa-file-word-o"></i>
+      <span class="post-count-item-text">本文字数: </span>
+      <span class="post-count">2.5k</span>
+      <i class="fa fa-clock-o"></i>
+      <span class="post-time-item-text">阅读时长: </span>
+      <span class="post-count">8 分钟 </span>
+   </div>
+
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <blockquote>
+<p>本文转载自 <a href="http://spaces.msn.com/cdyblog/" target="_blank" rel="noopener">http://spaces.msn.com/cdyblog/</a> 【侵删】</p>
+</blockquote>
+<p><strong>1. 从测试功能上分</strong><br>（1） 单元测试<br>针对不同语言，如JUNIT<br>（2） 功级测试<br>E—Test：功能强大，由于不是采用POST URL的方式回放脚本，所以可以支持多内码的测试数据（当然要程序支持），基本上可以应付大部分的WEB SITE。<br>MI公司的WINRUNNER<br>COMPUWARE的QARUN<br>RATIONAL的SQA ROBOT</p>
+<a id="more"></a>
+
+<p>（3） 压力测试<br>MI公司的WINLOAD<br>COMPUWARE的QALOAD<br>RATIONAL的SQA LOAD<br>（4） 负载测试<br>LOADRUNNER<br>RATIONAL VISUAL QUANTIFY<br>（5） WEB测试工具<br>MI公司的ASTRA系列<br>RSW公司的E—TEST SUITE等<br>（6） WEB系统测试工具<br>WORKBENCH<br>WEB APPLICATION STRESS TOOL（WAS）<br>（7） 数据库测试工具<br>TESTBYTES<br>（8） 回归测试工具<br>RATIONAL TEAM TEST<br>WINRUNNER<br>（9） 嵌入式测试工具<br>ATTOLTESTWARE。是ATTOLTESTWARE公司的自动生成测试代码的软件测试工具，特别适用于嵌入式实时应用软件单元和通信系统测试。<br>CODETEST是AppliedMicrosystemsCorp.公司的产品,是广泛应用的嵌入式软件在线测试工具。<br>GammaRay。GammaRay系列产品主要包括软件逻辑分析仪GammaProfiler、可靠性评测工具GammaRET等。<br>LogiScope是TeleLogic公司的工具套件，用于代码分析、软件测试、覆盖测试。<br>LynxInsure++是LynxREAL-TIMESYSTEMS公司的产品，基于LynxOS的应用代码检测与分析测试工具。<br>MessageMaster是ElviorLtd.公司的产品，测试嵌入式软件系统工具，向环境提供基于消息的接口。<br>VectorCast是VectorSoftware.Inc公司的产品。由6个集成的部件组成，自动生成测试代码，为主机和嵌入式环境构造可执行的测试架构。<br>（10） 系统性能测试工具<br>Rational Performance<br>（11） 页面链接测试<br>Link Sleuth<br>（12） 测试流程管理工具<br>Test Plan Control<br>（13） 测试管理工具<br>TestDirector<br>Rational公司的Test Manager<br>Compuware公司的QADirector<br>TestExpert：是Silicon Valley Networks公司产品的测试管理工具，能管理整个测试过程，从测试计划、测试例程、测试执行到测试报告。<br>（14） 缺陷跟踪工具<br>TrackRecord等<br>（15） 其他测试工具包<br>TestVectorGenerationSystem是T—VECTechnologies公司的产品。提供自动模型分析、测试生成、测试覆盖分析和测试执行的完整工具包，具有方便的用户接口和完备的文档支持。<br>TestQuestPro是TestQuest公司的非插入码式的自动操纵测试工具，提供一种高效的自动检测目标系统，获取其输出性能的测试方法。<br>TestWorks是SoftwareResearch.Inc公司的一整套软件测试工具，既可单独使用，也可捆绑销售使用。<br><strong>2、 从测试的方法上分</strong><br>（1） 白盒测试工具<br>白盒测试工主要有：Numega、PuRe、软件纠错工具（Rational Purify）。<br>内存资源泄漏检查：<br>Numega中的BounceChecher<br>Rational的 Purify等<br>代码覆盖率检查：<br>Numega的TrueCoverage<br>Rational的PureCoverage<br>TeleLogic公司的LogiScope<br>Macabe公司的Macabe<br>代码性能检查：<br>Numega的TrueTime<br>Rational的Quantify等<br>代码静态度量分析度量检查工具：LogiScope和Macabe等<br>黑盒测试工具主要有：QACenter、SQATeamTest、Rational Visual Visual Test。<br>QACenter：QACenter帮助所有测试人员创建一个快速、可重用的测试过程。这些测试工具自动帮助管理测试过程、快速分析和调试程序，包括针对回归、强度、单元、并发、集成、移植，容量和负载建立测试用例，自动执行测试和产生文档结果。QACenter主要包括以下几个模块：<br>QARun：应用的功能测试工具。<br>QALoad：强负载下应用的性能测试工具。<br>QADirector：测试的组织设计和创建以及管理工具。<br>TrackRecord：集成的缺陷跟踪管理工具。<br>EcoTools：高层次的性能监测工具。</p>
+<p><strong>3、部分具体测试工具的介绍</strong><br>（1）、性能优化工具EcoScope<br>EcoScope 是一套定位于应用（即服务提供者本身）及其所依赖的所有网络计算资源的解决方案。EcoScope可以提供应用视图，并标出应用是如何与基础架构相关联 的。这种视图是其他网络管理工具所不能提供的。EcoScope能解决在大型企业复杂环境下分析与测量应用性能的难题。通过提供应用的性能级别及其支撑架 构的信息，EcoScope能帮助IT部门就如何提高应用性能提出多方面的决策方案。<br>EcoScope的应用主要表现在以下几个方面：<br>确保成功部署新应用<br>维护性能的服务水平<br>加速问题检测与纠正的高级功能<br>定制视图有助于高效地分析数据<br>（2）、数据库测试数据自动生成工具——TestBytes<br>在 数据库开发的过程中，为了测试应用程序对数据库的访问，应当在数据库中生成测试用例数据，我们可能会发现当数据库中只有少量数据时，程序可能没有问题，但 是当真正投入到运用中产生了大量数据时就出现问题了，这往往是因为程序的编写没有达到，所以一定及早地通过在数据库中生成大量数据来帮助开发人员完善这部 分功能和性能。<br>TestBytes是一个用于自动生成测试数据的强大易用的工具，通过简单的点击式操作，就可以确定需要生成的数据类型（包括特殊 字符的定制），并通过与数据库的连接来自动生成数百万行正确的测试数据，可以极大地提高数据库开发人员、QA测试人员、数据仓库开发人员、应用开发人员的 工作效率。<br>（3）、PC—LINT<br>PC—LINT 主要进行更严格的语法检查功能，还完成相当程度的语义检查功能。可以这样认为：PC—LINT是一个更加智能、更加严格的编译器。PC—LINT在实现语 法和某些语义规则检查时，是通过参数配置完成的，它的选项就有数百个之多，因此，在使用PC—LINT过程中，了解选项的含义也很重要。<br>（4）、TCL<br>TCL是Tool Command Language的缩写，它是一种很流行的脚本解释器，尤其在测试领域，它的最大特点是可移植性好，接口简单，方便，可以很容易地嵌入到软件中，作为自己的解释器使用。<br>TCL提供两种接口：编程接口和用户接口。编程接口是通过LIB或DLL形式提供的，提供了一些函数（命令）供调用，包括：分配一个解释器指针（对象）；初始化解释器（指针）；注册扩展函数等。用户接口很简单，即编写的脚本，脚本里面包含对扩展命令的调用。<br>（5）VB测试工具：VB Watch<br>（6）Java 程序的测试工具<br>1）Bean—Test<br>2）EJBQuickTest<br>3）JStyle<br>4）JTest<br>5）HttpUnit<br>6）JUnit<br>（7）、覆盖测试<br>C—Cover<br>C—Cover是一个测试工具软件，用来找出没有被测到的代码，并报告测试的覆盖率。C—Cover</p>
+<p>只支持C/C++的代码覆盖率分析，其它语言不支持。但不受OS的限制。</p>
+<hr>
+<p>单元测试方面：（对开发人员比较有用） J-Unit工具。<br> 功能测试方面：E-test是个不错的选择，功能很强大，由于不是采用Post URL的方式回放脚本，所以可以支持多内码的测试数据（当然要程序支持）。基本上可以应付大部分的Web Site。<br> 如果只是利用脚本回放代替手工劳动，或者做对页面响应数的性能测试，Microsoft Web Application Stress Tool是个不错的选择。<br>  另外，在性能测试方面，PureLoad也是一个不错的工具，完全用Java写成，可以测试各种C/S程序，如SMTP Server等。这两个工具都是使用Post URL的方法测试Web Application的。对大量使用JavaScript的页面不太适合。当然，如果程序在Unix，linux下面运行的话，可以直接编写Shell 脚本程序，更加方便。<br> 另外，还有很多专门的工具，比如说Linkbot是专门作页面链接测试的。<br> 另外，测试流程管理工具也有不 少，个人用过也一直在用的是Test Plan Control，短小精悍，不错。  至于WinRunner和LoadRunner之类，因为没有License，所以都没怎么用过，惭愧。不过我看过一篇英国人评价英国测试市场上最流行 的五个软件的文章。WinRunner得分最高。<br> 测试工具从测试的方法上可以分为两种：白盒测试和黑盒测试  白盒测试工具主要有：<br> 内存资源泄漏检查：Numega中的bouncechecker,Rational的Purify等<br>  代码覆盖率检查：Numega中的truecoverage,Rational的Purecoverage，Telelogic公司的 logiscope, Macabe公司的Macabe等  代码性能检查：Numega中的truetime,Rational的Quantify等<br> 代码静态度量分析质量检查工具：logiscope和Macabe等<br> 黑盒测试工具主要有：  客户端功能测试：MI公司的winrunner,compuware的qarun,Rational的SQA robot等等<br> 服务器端压力性能测试： MI公司的winload,compuware的qaload,Rational的SQA load等等<br> Web测试工具：MI公司的Astra系列，rsw公司的e-test suite等等<br> 测试管理工具：rational的test manager,compuware的qadirector等等，此外还有缺陷跟踪工具 trackrecord等。<br> 数据库测试工具:TestBytes<br> 黑盒测试工具：QACenter、SQATeamTest，Rational Viaual Test。<br> 回归测试工具：Rational TeamTest，WinRunner（MI公司）<br> WEB系统测试工具：TEST，Workberch，Web Appication Stress Tool（WAS）<br> 白盒测试工具：Numega 、PuRe、软件纠错工具（Rational Purity）。<br> 嵌入式测试工具：Logiscope（静态测试工具）、CodeTest。<br> 系统负荷测试工具：RationalPerformance<br> 涵盖测试工具范围评估工具<br> 软件性能测试工具：LoadRunner（MI产品）、Rational Visual Qantify<br> 测试管理工具：TestDirector（MI产品支持整个生命周期中测试流程管理）</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "一只蚂蚁"
+        },
+        "headline": "相对完整的软件测试工具手册",
+        "image": "http://blog.e-ant.cn",
+        "keywords": "工具 软件测试",
+        "genre": "体系 常用工具",
+        "datePublished": "2010-03-23",
+        "dateCreated": "2010-03-23",
+        "dateModified": "2020-04-26",
+        "url": "http://blog.e-ant.cn/2010/03/23/测试/unittest/",
+        "description": "
+本文转载自 http://spaces.msn.com/cdyblog/ 【侵删】
+
+1. 从测试功能上分（1） 单元测试针对不同语言，如JUNIT（2） 功级测试E—Test：功能强大，由于不是采用POST URL的方式回放脚本，所以可以支持多内码的测试数据（当然要程序支持），基本上可以应付大部分的WEB SITE。MI公司的WINRUNNERCOMPUWARE的QARUNRATIONAL的SQA ROBOT",
+        "wordCount": 129
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <!-- ����Ҫ��ע��--�罻ģ�� -->
+    <!--
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/w3freewalker" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    -->
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2010/04/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-engine/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            MySQL存储引擎简介
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2010/02/23/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/RegExp/regexp-demo/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">正则表达式示例</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/ASP-NET/" style="font-size: 10px;">ASP.NET</a> <a href="/tags/C/" style="font-size: 15px;">C#</a> <a href="/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/tags/Crystal-Report/" style="font-size: 10px;">Crystal Report</a> <a href="/tags/FAQ/" style="font-size: 15px;">FAQ</a> <a href="/tags/Hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" style="font-size: 10px;">Hexo博客搭建</a> <a href="/tags/MySQL/" style="font-size: 20px;">MySQL</a> <a href="/tags/Next%E4%B8%BB%E9%A2%98/" style="font-size: 10px;">Next主题</a> <a href="/tags/Nexus/" style="font-size: 10px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Oracle/" style="font-size: 15px;">Oracle</a> <a href="/tags/RegExpression/" style="font-size: 10px;">RegExpression</a> <a href="/tags/SQL-Server/" style="font-size: 10px;">SQL Server</a> <a href="/tags/excel/" style="font-size: 10px;">excel</a> <a href="/tags/ssh%E5%8D%87%E7%BA%A7/" style="font-size: 10px;">ssh升级</a> <a href="/tags/%E5%8D%B8%E8%BD%BD/" style="font-size: 10px;">卸载</a> <a href="/tags/%E5%AE%89%E8%A3%85/" style="font-size: 10px;">安装</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%A4%87%E4%BB%BD/" style="font-size: 10px;">定时备份</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 20px;">工具</a> <a href="/tags/%E5%BA%8F%E5%88%97%E5%8F%B7/" style="font-size: 10px;">序列号</a> <a href="/tags/%E6%89%B9%E9%87%8F%E8%BD%AC%E6%8D%A2/" style="font-size: 10px;">批量转换</a> <a href="/tags/%E6%8A%A5%E8%A1%A8/" style="font-size: 10px;">报表</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">正则表达式</a> <a href="/tags/%E6%B3%A8%E5%86%8C%E7%A0%81/" style="font-size: 10px;">注册码</a> <a href="/tags/%E6%BA%90%E7%A0%81%E7%BD%91/" style="font-size: 10px;">源码网</a> <a href="/tags/%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/" style="font-size: 10px;">版本升级</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">软件测试</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a></p>
+                            <p class="item-title"><a href="/2020/04/23/%E5%B7%A5%E5%85%B7/hexo/hexo-blog-build/" class="title">阿里云CentOS7+Nginx+Nodejs+Hexo搭建个人静态博客</a></p>
+                            <p class="item-date"><time datetime="2020-04-23T12:35:03.000Z" itemprop="datePublished">2020-04-23</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></p>
+                            <p class="item-title"><a href="/2020/04/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-backup/" class="title">MySQL数据库定时备份归档脚本</a></p>
+                            <p class="item-date"><time datetime="2020-04-15T05:35:00.000Z" itemprop="datePublished">2020-04-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/Maven%E7%A7%81%E6%9C%8D/">Maven私服</a></p>
+                            <p class="item-title"><a href="/2018/02/15/%E5%B7%A5%E5%85%B7/nexus-update/" class="title">Sonatype Nexus版本库升级方案</a></p>
+                            <p class="item-date"><time datetime="2018-02-15T03:32:00.000Z" itemprop="datePublished">2018-02-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/Linux%E7%B3%BB%E7%BB%9F/">Linux系统</a></p>
+                            <p class="item-title"><a href="/2015/06/23/Linux/centos6-ssh-upd/" class="title">SSH升级方案【基于CentOS6版本】</a></p>
+                            <p class="item-date"><time datetime="2015-06-23T04:55:00.000Z" itemprop="datePublished">2015-06-23</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></p>
+                            <p class="item-title"><a href="/2013/06/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-faq/" class="title">MySQL常见问题处理</a></p>
+                            <p class="item-date"><time datetime="2013-06-15T02:30:00.000Z" itemprop="datePublished">2013-06-15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/Linux%E7%B3%BB%E7%BB%9F/">Linux系统</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/Maven%E7%A7%81%E6%9C%8D/">Maven私服</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%90%8E%E7%AB%AF/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">6</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/04/">四月 2010</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/03/">三月 2010</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/02/">二月 2010</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2009/11/">十一月 2009</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2009/09/">九月 2009</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2009/08/">八月 2009</a><span class="archive-list-count">4</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="mailto:285640485@qq.com">E-Mail:285640485@qq.com</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://hexo.io/plugins/" target="_blank" rel="noopener">Hexo插件</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.fontawesome.com.cn/" target="_blank" rel="noopener">Font Awesone中文网</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 一只蚂蚁</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+                <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+                <span id="busuanzi_container_site_pv">本站总访问量</span><span id="busuanzi_value_site_pv"></span>次</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <span id="busuanzi_container_site_uv">本站访客数</span><span id="busuanzi_value_site_uv"></span>人次
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://blog.e-ant.cn/2010/03/23/%E6%B5%8B%E8%AF%95/unittest/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

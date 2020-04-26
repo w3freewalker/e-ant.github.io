@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>阿里云CentOS7+Nginx+Nodejs+Hexo搭建个人静态博客 | 蚂蚁窝</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="Hexo博客搭建,Next主题,Nginx" />
+    
+    <meta name="description" content="写在前面2010年左右，有用当时很火的CSDN写过一阵子的博客，后来由于工作的关系，自己也懒，就一直没有更新，然后17年左右有一天突然想起来，想登录上去，发现账号密码已经丢了，折腾了很久，愣是没找回来。最近时间相对比较充裕些，就希望写些文字对自己的知识体系做下梳理记录，有个自己的博客，可以随意DIY，还是比较方便些。刚好自己名下有一台闲置的阿里云ECS服务器，度娘了一圈，发现Hexo静态博客依赖少">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云CentOS7+Nginx+Nodejs+Hexo搭建个人静态博客">
+<meta property="og:url" content="http://blog.e-ant.cn/2020/04/23/%E5%B7%A5%E5%85%B7/hexo/hexo-blog-build/index.html">
+<meta property="og:site_name" content="蚂蚁窝">
+<meta property="og:description" content="写在前面2010年左右，有用当时很火的CSDN写过一阵子的博客，后来由于工作的关系，自己也懒，就一直没有更新，然后17年左右有一天突然想起来，想登录上去，发现账号密码已经丢了，折腾了很久，愣是没找回来。最近时间相对比较充裕些，就希望写些文字对自己的知识体系做下梳理记录，有个自己的博客，可以随意DIY，还是比较方便些。刚好自己名下有一台闲置的阿里云ECS服务器，度娘了一圈，发现Hexo静态博客依赖少">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.e-ant.cn/images/bt-panel.png">
+<meta property="article:published_time" content="2020-04-23T12:35:03.000Z">
+<meta property="article:modified_time" content="2020-04-25T09:40:28.793Z">
+<meta property="article:author" content="一只蚂蚁">
+<meta property="article:tag" content="Hexo博客搭建">
+<meta property="article:tag" content="Next主题">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.e-ant.cn/images/bt-panel.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">行走无间、自在心间。</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+
+                                </li>
+                                    
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/Linux%E7%B3%BB%E7%BB%9F/">Linux系统</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/Maven%E7%A7%81%E6%9C%8D/">Maven私服</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%89%8D%E7%AB%AF/">前端</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li></ul></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/tools/index.html">实用小工具</a>
+                                </li>
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/games/index.html">放松一下</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-工具/hexo/hexo-blog-build" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        阿里云CentOS7+Nginx+Nodejs+Hexo搭建个人静态博客
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+      <i class="fa fa-calendar"></i>
+      <a href="/2020/04/23/%E5%B7%A5%E5%85%B7/hexo/hexo-blog-build/" class="article-date">
+         <time datetime="2020-04-23T12:35:03.000Z" itemprop="datePublished">2020-04-23</time>
+      </a>
+    </div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="tag">Hexo博客搭建</a>, <a class="tag-link" href="/tags/Next%E4%B8%BB%E9%A2%98/" rel="tag">Next主题</a>, <a class="tag-link" href="/tags/Nginx/" rel="tag">Nginx</a>
+    </div>
+
+                
+
+                
+   <div class="article-counter">
+      <i class="fa fa-file-word-o"></i>
+      <span class="post-count-item-text">本文字数: </span>
+      <span class="post-count">2.2k</span>
+      <i class="fa fa-clock-o"></i>
+      <span class="post-time-item-text">阅读时长: </span>
+      <span class="post-count">9 分钟 </span>
+   </div>
+
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>2010年左右，有用当时很火的CSDN写过一阵子的博客，后来由于工作的关系，自己也懒，就一直没有更新，然后17年左右有一天突然想起来，想登录上去，发现账号密码已经丢了，折腾了很久，愣是没找回来。最近时间相对比较充裕些，就希望写些文字对自己的知识体系做下梳理记录，有个自己的博客，可以随意DIY，还是比较方便些。刚好自己名下有一台闲置的阿里云ECS服务器，度娘了一圈，发现Hexo静态博客依赖少(仅依赖node)、易部署、占用资源小、响应快、模版多、Markdown深度支持等优点，最重要的，是对程序员友好，可折腾空间大，于是有了这个博客。以下是对搭建Hexo博客过程的一个记录。</p>
+<a id="more"></a>
+
+<hr>
+<h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><h3 id="本地环境"><a href="#本地环境" class="headerlink" title="本地环境"></a>本地环境</h3><p>Windows10(64位)、Git、Nodejs、Hexo</p>
+<h3 id="阿里云环境"><a href="#阿里云环境" class="headerlink" title="阿里云环境"></a>阿里云环境</h3><p>阿里云ECS(Centos7.4 X64)、宝塔、Nginx、Git、Nodejs、Hexo</p>
+<p>通过Git实现自动化部署到云服务器上。</p>
+<hr>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h3 id="本地WIN10搭建"><a href="#本地WIN10搭建" class="headerlink" title="本地WIN10搭建"></a>本地WIN10搭建</h3><h4 id="1-安装Git"><a href="#1-安装Git" class="headerlink" title="1. 安装Git"></a>1. 安装Git</h4><p>安装过程自行百度。</p>
+<p>安装完成后，配置git全局账号信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.email 'you@email.com'</span><br><span class="line">git config --global user.name "your name"</span><br></pre></td></tr></table></figure>
+
+<p>需要再生成ssh公钥，方便后面自动化部署到云服务器上：</p>
+<p>在win10任意地方，右键，点击Git Bash Here打开命令行终端，执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
+
+<p>生成的文件默认放在c:\用户\你自己的用户名.ssh\目录下。</p>
+<h4 id="2-安装Nodejs"><a href="#2-安装Nodejs" class="headerlink" title="2 安装Nodejs"></a>2 安装Nodejs</h4><p>网上下载最新版本的<a href="https://nodejs.org/en/" target="_blank" rel="noopener">Nodejs</a>，下载后直接安装即可，安装完成后打开cmd，输入node -v及npm -v，能成功输出版本号信息，就说明成功安装完Nodejs。</p>
+<h4 id="3-安装-Hexo"><a href="#3-安装-Hexo" class="headerlink" title="3 安装 Hexo"></a>3 安装 Hexo</h4><p>新建一个目录，建议不要放在C盘下，比如我的是D:\hexo-blog\myblog，打开cmd，cd到这个目录下，运行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd d:\nexo-blog\myblog</span><br><span class="line">npm install hexo-cli -g</span><br><span class="line">hexo init</span><br><span class="line">npm install</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动博客本地访问</span></span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p>上述如果一切正常，会将hexo博客发布到<a href="http://localhost:4000下，打开即可看到。">http://localhost:4000下，打开即可看到。</a></p>
+<h4 id="4-Hexo基本配置"><a href="#4-Hexo基本配置" class="headerlink" title="4 Hexo基本配置"></a>4 Hexo基本配置</h4><p>博客搭建好了，总得把博客修改成自己的内容吧，进入到打开myblog/_config.yml文件（此文件为hexo的全局配置文件，不同于下面要提到的主题中的同名文件）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Site</span></span><br><span class="line">title: 网站名称</span><br><span class="line">subtitle: ''   	#子标题</span><br><span class="line">description: '' #网站描述</span><br><span class="line">keywords:		# 关键字</span><br><span class="line">author:         #作者</span><br><span class="line">language: zh-CN #语言,这个表示中文，根据主题的支持项进行配置，具体每个主师支持哪些语言，可以参见themes/主题名/language文件夹下罗列的文件名称</span><br><span class="line">timezone: ''    # 时区，中国可以填'Asia/ShangHai'</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-配置Next主题"><a href="#5-配置Next主题" class="headerlink" title="5 配置Next主题"></a>5 配置Next主题</h4><p>hexo-next主题被认为是比较好看好用的主题，我个人也是比较中意，以下介绍下配置过程</p>
+<p>进入到myblog目录下，可以看到一个themes文件夹，这个就是存放所有主题的地方，我们先把next主题拉到本地：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next.git themes/next</span><br></pre></td></tr></table></figure>
+
+<p>打开themes/next下的_config.yml文件，修改其中的部份内容，Schemes为网站风格样式，menu为菜单列表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ---------------------------------------------------------------</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Scheme Settings</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ---------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Schemes</span></span><br><span class="line"><span class="meta">#</span><span class="bash">scheme: Muse</span></span><br><span class="line"><span class="meta">#</span><span class="bash">scheme: Mist</span></span><br><span class="line">scheme: Pisces</span><br><span class="line"><span class="meta">#</span><span class="bash">scheme: Gemini</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Dark Mode</span></span><br><span class="line">darkmode: true</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> ---------------------------------------------------------------</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Menu Settings</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ---------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Usage: `Key: /link/ || icon`</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Key is the name of menu item. If the translation <span class="keyword">for</span> this item is available, the translated text will be loaded, otherwise the Key name will be used. Key is <span class="keyword">case</span>-senstive.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Value before `||` delimiter is the target link, value after `||` delimiter is the name of Font Awesome icon.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> When running the site <span class="keyword">in</span> a subdirectory (e.g. yoursite.com/blog), remove the leading slash from link value (/archives -&gt; archives).</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> External url should start with http:// or https://</span></span><br><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line"><span class="meta">  #</span><span class="bash">about: /about/ || fa fa-user</span></span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line"><span class="meta">  #</span><span class="bash">schedule: /schedule/ || fa fa-calendar</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">sitemap: /sitemap.xml || fa fa-sitemap</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">commonweal: /404/ || fa fa-heartbeat</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，菜单默认是只有home及archives，其它几个视自己需要自行添加，添加方法如下：</p>
+<ul>
+<li><p>创建tags</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd d:\nexo-blog\myblog</span><br><span class="line">hexo new page "tags"</span><br></pre></td></tr></table></figure>
+
+<p>此时，系统会在myblog\source下创建一个tags的文件夹以下文件夹下的index.md文件，打开该文件，编辑，添加type为tags</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: All tags</span><br><span class="line">date: 2019-04-24 09:34:03</span><br><span class="line">type: "tags"</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建categories</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd d:\nexo-blog\myblog</span><br><span class="line">hexo new page "categories"</span><br></pre></td></tr></table></figure>
+
+<p>此时，系统会在myblog\source下创建一个categories的文件夹以下文件夹下的index.md文件，打开该文件，编辑，添加type为tags</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories</span><br><span class="line">date: 2019-04-24 09:34:03</span><br><span class="line">type: "categories"</span><br><span class="line">----</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>回到myblog目录下，我们需要修改一下全局的_config.yml中的主题配置项，将刚才的next主题配置进去，注意名称与themes下的目录名一定要一致，不然不会生效：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Extensions</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Plugins: https://hexo.io/plugins/</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Themes: https://hexo.io/themes/</span></span></span><br><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+
+<p>这样，next主题就算配置完成了。<code>hexo server</code>重启一下服务，就可以看到效果了。</p>
+<hr>
+<h3 id="阿里云CentOS环境搭建"><a href="#阿里云CentOS环境搭建" class="headerlink" title="阿里云CentOS环境搭建"></a>阿里云CentOS环境搭建</h3><h4 id="1-git安装配置"><a href="#1-git安装配置" class="headerlink" title="1. git安装配置"></a>1. git安装配置</h4><p>安装git</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install git</span><br></pre></td></tr></table></figure>
+
+<p>创建git账户、添加权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adduser git</span><br><span class="line">chmod 740 /etc/sudoers</span><br><span class="line">vim /etc/sudoers</span><br></pre></td></tr></table></figure>
+
+<p>找到以下内容，并参照添加</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## Allow root to run any commands anywhere</span></span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line"><span class="comment">#添加此行--git权限</span></span><br><span class="line">git    ALL=(ALL)     ALL</span><br></pre></td></tr></table></figure>
+
+<p>保存退出并改回权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 400 /etc/sudoers</span><br></pre></td></tr></table></figure>
+
+<p>设置git账户密码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd git</span><br></pre></td></tr></table></figure>
+
+<p>切换至git用户，创建<del>/.ssh文件夹和</del>/.ssh/authorized_keys文件，并赋予相应的权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">su git</span><br><span class="line">mkdir ~/.ssh</span><br><span class="line">vim ~/.ssh/authorized_keys</span><br><span class="line"><span class="comment"># 将win10中生成的公钥id_rsa.pub文件中的内容复制到authorized_keys中,保存并退出</span></span><br><span class="line">chmod 600 /home/git/.ssh/authorized_keys</span><br><span class="line">chmod 700 /home/git/.ssh</span><br></pre></td></tr></table></figure>
+
+<p>本地终端添加免密登录git用户至云服务器，在本地win10上执行以下命令后输入yes，后续只要再执行下面这条命令，就可以直接免密登录到云服务器，如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -v git@服务器公网IP或服务器域名</span><br></pre></td></tr></table></figure>
+
+<p>云服务器切换回root账户，并执行以下命令，创建相应的账户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> /var/repo为git的仓库目录</span></span><br><span class="line">mkdir /var/repo</span><br><span class="line">chown -R git:git /var/repo</span><br><span class="line">chmod -R 755 /var/repo</span><br><span class="line"><span class="meta">#</span><span class="bash"> /var/www/hexo作为网站的根目录</span></span><br><span class="line">mkdir /var/www/hexo</span><br><span class="line">chown -R git:git /var/www/hexo</span><br><span class="line">chmod -R 755 /var/www/hexo</span><br></pre></td></tr></table></figure>
+
+<p>创建一个空的Git仓库(<strong><em>myblog.git可以自己定义，注意需要与WIN10配置自动化部署时写的名称一致</em></strong>)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /var/repo</span><br><span class="line">git init --bare myblog.git</span><br></pre></td></tr></table></figure>
+
+<p>创建一个新的Git钩子，用于自动化部署</p>
+<p>在/var/repo/myblog.git下，有一个自动生成的hooks文件夹，我们需要在这里新建一个钩子文件post-receive</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /var/repo/myblog.git/hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<p>进入编辑模式，在该文件中添加以下代码，指定Git的工作树（源代码）和Git目录（配置文件等），保存退出。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">git --work-tree=/var/www/hexo --git-dir=/var/repo/myblog.git checkout -f</span><br></pre></td></tr></table></figure>
+
+<p>添加文件可执行权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown -R git:git /var/repo/myblog.git/hooks/post-receive</span><br><span class="line">chmod +x /var/repo/myblog.git/hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<p>至此，Git仓库及自动化部署算是完全搭建好了。</p>
+<h4 id="2-安装宝塔、选配Nginx"><a href="#2-安装宝塔、选配Nginx" class="headerlink" title="2. 安装宝塔、选配Nginx"></a>2. 安装宝塔、选配Nginx</h4><p>其实我之前一直都用lnmp的，不过在试过傻瓜式的宝塔后，就种草了，安装简单、配置方便、易扩展，尤其适合一些小白型用户。以下是安装过程：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget &amp;&amp; wget -O install.sh http://download.bt.cn/install/install_6.0.sh &amp;&amp; bash install.sh</span><br></pre></td></tr></table></figure>
+
+<p>默认安装即可，完成安装后，会显示宝塔面板后台的登录地址，账号及密码。</p>
+<img src='/images/bt-panel.png' />
+
+<p>登录宝塔面板后，选配Nginx并点击安装，等待安装完成。</p>
+<p>安装完Nginx，接下来就是添加网站，点击网站-&gt;添加站点-&gt;输入域名(无域名可以输入公网IP)-&gt;PHP版本选择【纯静态】，其它默认，提交。然后进一步进入到设置-&gt;配置文件，检查下配置项，修改并保存：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"># 使用80端口，务必要完成备案才可以</span></span><br><span class="line">    listen 80;</span><br><span class="line">    <span class="comment"># server_name修改为自己的域名</span></span><br><span class="line">    server_name www.xxx.com;</span><br><span class="line">    index index.php index.html index.htm default.php default.htm default.html;</span><br><span class="line">    <span class="comment"># 网站的根目录</span></span><br><span class="line">    root /var/www/hexo;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-启动宝塔服务"><a href="#3-启动宝塔服务" class="headerlink" title="3. 启动宝塔服务"></a>3. 启动宝塔服务</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service bt restart</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="配置自动化部署"><a href="#配置自动化部署" class="headerlink" title="配置自动化部署"></a>配置自动化部署</h3><p> 返回到本地WIN10上，通过配置hexo全局的<em>config.yml文件，实现自动化部署。</em></p>
+<p>_打开本地WIN10上的myblog文件夹，打开_config.yml文件，找到deploy：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Deployment</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Docs: https://hexo.io/docs/deployment.html</span></span></span><br><span class="line">deploy:</span><br><span class="line">  type: git  </span><br><span class="line"><span class="meta">  #</span><span class="bash"> SERVER改为自己的服务器地址，另此处的myblog.git可以自行定义，但需要与下面器配置的名称相对应</span></span><br><span class="line">  repo: git@SERVER:/var/repo/myblog.git </span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>保存并退出，返回到myblog目录，执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+
+<p>没有显示绿色说明完成了，打开浏览器，输入你的域名或IP地址，就可以看到最终的hexo博客了。</p>
+<p><strong>至此，一个属于自己的hexo博客的基础功能就都搞定了，其余DIY环节，待后续进一步研究。</strong></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "一只蚂蚁"
+        },
+        "headline": "阿里云CentOS7+Nginx+Nodejs+Hexo搭建个人静态博客",
+        "image": "http://blog.e-ant.cn/images/bt-panel.png",
+        "keywords": "Hexo博客搭建 Next主题 Nginx",
+        "genre": "体系 常用工具",
+        "datePublished": "2020-04-23",
+        "dateCreated": "2020-04-23",
+        "dateModified": "2020-04-25",
+        "url": "http://blog.e-ant.cn/2020/04/23/工具/hexo/hexo-blog-build/",
+        "description": "写在前面2010年左右，有用当时很火的CSDN写过一阵子的博客，后来由于工作的关系，自己也懒，就一直没有更新，然后17年左右有一天突然想起来，想登录上去，发现账号密码已经丢了，折腾了很久，愣是没找回来。最近时间相对比较充裕些，就希望写些文字对自己的知识体系做下梳理记录，有个自己的博客，可以随意DIY，还是比较方便些。刚好自己名下有一台闲置的阿里云ECS服务器，度娘了一圈，发现Hexo静态博客依赖少(仅依赖node)、易部署、占用资源小、响应快、模版多、Markdown深度支持等优点，最重要的，是对程序员友好，可折腾空间大，于是有了这个博客。以下是对搭建Hexo博客过程的一个记录。",
+        "wordCount": 887
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <!-- ����Ҫ��ע��--�罻ģ�� -->
+    <!--
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/w3freewalker" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    -->
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2020/04/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-backup/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">MySQL数据库定时备份归档脚本</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/ASP-NET/" style="font-size: 10px;">ASP.NET</a> <a href="/tags/C/" style="font-size: 15px;">C#</a> <a href="/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/tags/Crystal-Report/" style="font-size: 10px;">Crystal Report</a> <a href="/tags/FAQ/" style="font-size: 15px;">FAQ</a> <a href="/tags/Hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" style="font-size: 10px;">Hexo博客搭建</a> <a href="/tags/MySQL/" style="font-size: 20px;">MySQL</a> <a href="/tags/Next%E4%B8%BB%E9%A2%98/" style="font-size: 10px;">Next主题</a> <a href="/tags/Nexus/" style="font-size: 10px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Oracle/" style="font-size: 15px;">Oracle</a> <a href="/tags/RegExpression/" style="font-size: 10px;">RegExpression</a> <a href="/tags/SQL-Server/" style="font-size: 10px;">SQL Server</a> <a href="/tags/excel/" style="font-size: 10px;">excel</a> <a href="/tags/ssh%E5%8D%87%E7%BA%A7/" style="font-size: 10px;">ssh升级</a> <a href="/tags/%E5%8D%B8%E8%BD%BD/" style="font-size: 10px;">卸载</a> <a href="/tags/%E5%AE%89%E8%A3%85/" style="font-size: 10px;">安装</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%A4%87%E4%BB%BD/" style="font-size: 10px;">定时备份</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 20px;">工具</a> <a href="/tags/%E5%BA%8F%E5%88%97%E5%8F%B7/" style="font-size: 10px;">序列号</a> <a href="/tags/%E6%89%B9%E9%87%8F%E8%BD%AC%E6%8D%A2/" style="font-size: 10px;">批量转换</a> <a href="/tags/%E6%8A%A5%E8%A1%A8/" style="font-size: 10px;">报表</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">正则表达式</a> <a href="/tags/%E6%B3%A8%E5%86%8C%E7%A0%81/" style="font-size: 10px;">注册码</a> <a href="/tags/%E6%BA%90%E7%A0%81%E7%BD%91/" style="font-size: 10px;">源码网</a> <a href="/tags/%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/" style="font-size: 10px;">版本升级</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">软件测试</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a></p>
+                            <p class="item-title"><a href="/2020/04/23/%E5%B7%A5%E5%85%B7/hexo/hexo-blog-build/" class="title">阿里云CentOS7+Nginx+Nodejs+Hexo搭建个人静态博客</a></p>
+                            <p class="item-date"><time datetime="2020-04-23T12:35:03.000Z" itemprop="datePublished">2020-04-23</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></p>
+                            <p class="item-title"><a href="/2020/04/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-backup/" class="title">MySQL数据库定时备份归档脚本</a></p>
+                            <p class="item-date"><time datetime="2020-04-15T05:35:00.000Z" itemprop="datePublished">2020-04-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/Maven%E7%A7%81%E6%9C%8D/">Maven私服</a></p>
+                            <p class="item-title"><a href="/2018/02/15/%E5%B7%A5%E5%85%B7/nexus-update/" class="title">Sonatype Nexus版本库升级方案</a></p>
+                            <p class="item-date"><time datetime="2018-02-15T03:32:00.000Z" itemprop="datePublished">2018-02-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/Linux%E7%B3%BB%E7%BB%9F/">Linux系统</a></p>
+                            <p class="item-title"><a href="/2015/06/23/Linux/centos6-ssh-upd/" class="title">SSH升级方案【基于CentOS6版本】</a></p>
+                            <p class="item-date"><time datetime="2015-06-23T04:55:00.000Z" itemprop="datePublished">2015-06-23</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></p>
+                            <p class="item-title"><a href="/2013/06/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-faq/" class="title">MySQL常见问题处理</a></p>
+                            <p class="item-date"><time datetime="2013-06-15T02:30:00.000Z" itemprop="datePublished">2013-06-15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><span class="category-list-count">16</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/Linux%E7%B3%BB%E7%BB%9F/">Linux系统</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/Maven%E7%A7%81%E6%9C%8D/">Maven私服</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%89%8D%E7%AB%AF/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%90%8E%E7%AB%AF/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">6</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/04/">四月 2010</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/03/">三月 2010</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2010/02/">二月 2010</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2009/11/">十一月 2009</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2009/09/">九月 2009</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2009/08/">八月 2009</a><span class="archive-list-count">4</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="mailto:285640485@qq.com">E-Mail:285640485@qq.com</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://hexo.io/plugins/" target="_blank" rel="noopener">Hexo插件</a>
+                    </li>
+                
+                    <li>
+                        <a href="http://www.fontawesome.com.cn/" target="_blank" rel="noopener">Font Awesone中文网</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 一只蚂蚁</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+                <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+                <span id="busuanzi_container_site_pv">本站总访问量</span><span id="busuanzi_value_site_pv"></span>次</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <span id="busuanzi_container_site_uv">本站访客数</span><span id="busuanzi_value_site_uv"></span>人次
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://blog.e-ant.cn/2020/04/23/%E5%B7%A5%E5%85%B7/hexo/hexo-blog-build/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
