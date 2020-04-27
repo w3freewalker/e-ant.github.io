@@ -82,7 +82,7 @@
                     </h1>
                     
                         <h2 class="subtitle-wrap">
-                            <p class="subtitle">行走无间、自在心间。</p>
+                            <p class="subtitle">▄︻┻┳═一 在宇宙中留下你的足迹 一═┳┻︻▄</p>
                         </h2>
                     
                 </div>
@@ -238,42 +238,67 @@
         <footer class="article-footer">
             
 
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
+
+
+    <a data-url="http://blog.e-ant.cn/2009/11/19/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/CSharp/donet-crystal/" data-id="ck9hsciio0023587qd8el5jj8" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
 </script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
 
         </footer>
     </div>
@@ -377,9 +402,20 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">最新文章</h3>
         <div class="widget">
-            <ul id="recent-post" class="no-thumbnail">
+            <ul id="recent-post" class="">
                 
                     <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/04/23/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/hexo/hexo-blog-build/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/bt-panel.png)" alt="阿里云CentOS7+Nginx+Nodejs+Hexo搭建个人静态博客" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a></p>
@@ -390,6 +426,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
                     <li>
                         
+                        <div class="item-thumbnail">
+                            <a href="/2020/04/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-backup/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
+                        
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></p>
                             <p class="item-title"><a href="/2020/04/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-backup/" class="title">MySQL数据库定时备份归档脚本</a></p>
@@ -398,6 +445,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     </li>
                 
                     <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/02/15/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/maven/nexus-update/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/nexus-001.png)" alt="Sonatype Nexus版本库升级方案" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a></p>
@@ -408,6 +466,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
                     <li>
                         
+                        <div class="item-thumbnail">
+                            <a href="/2017/03/18/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/csvn/csvn-forgetpwd/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
+                        
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a></p>
                             <p class="item-title"><a href="/2017/03/18/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/csvn/csvn-forgetpwd/" class="title">CSVN(CollabNet Subversion)管理员密码忘记解决方案</a></p>
@@ -416,6 +485,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     </li>
                 
                     <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2015/08/21/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/nfs/nfs-config/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+    
+</a>
+
+                        </div>
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/">体系</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%E4%BD%93%E7%B3%BB/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/">常用工具</a></p>
