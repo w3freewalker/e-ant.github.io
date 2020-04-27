@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>excel中从文件路径取文件名的快捷处理方案</title>
+    <url>/2009/09/17/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/excel01/</url>
+    <content><![CDATA[<p>在做软件开发，基本上写工作日志是每天必不可少的环节，每天都要整理当天所修改的文件列表，都要用到excel。最经常的情况就是从cvs上把已上传的文件路径copy下来，粘到excel中，然后再去切出文件名。资料少还受得了。资料多了，就算是采用查找替换，也是大费周折，实在是浪费时间，于是花了点儿心思，自已写了一个excel处理函数,将这部份的工作无私地奉献给excel处理。处理后，只要将mouse上下一拉，一切搞定.终于可以省心啦。</p>
+<a id="more"></a>
+
+<p>处理函数如下：</p>
+<figure class="highlight vbscript"><table><tr><td class="code"><pre><span class="line">fx=<span class="built_in">RIGHT</span>(C2,<span class="built_in">LEN</span>(C2)-SEARCH(<span class="string">"@"</span>,SUBSTITUTE(C2,<span class="string">"/"</span>,<span class="string">"@"</span>,<span class="built_in">LEN</span>(C2)-<span class="built_in">LEN</span>(SUBSTITUTE(C2,<span class="string">"/"</span>,<span class="string">""</span>)))))</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/excel01-1.jpg" alt="图一:处理前"></p>
+<p><img src="/images/excel01-2.jpg" alt="图二:处理后"></p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>excel</tag>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSH升级方案【基于CentOS6版本】</title>
+    <url>/2015/06/23/Linux/centos6-ssh-upd/</url>
+    <content><![CDATA[<blockquote>
+<p><strong>注意：</strong></p>
+<ol>
+<li><strong>以下方案在centos6(查看方法：cat /etc/issue)版本下测试成功，其它版本未验证，谨慎操作。</strong></li>
+<li><strong>建议直接在~目录下操作</strong></li>
+<li><strong>务必严格按照下述步骤逐步执行</strong></li>
+<li><strong>保险起见，以下升级步骤全部完成后，修改一次root密码，改成原来的密码</strong></li>
+<li><strong>版本升级后，可以重启下服务器</strong></li>
+</ol>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="升级步骤"><a href="#升级步骤" class="headerlink" title="升级步骤"></a>升级步骤</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp -rf /etc/ssh /etc/ssh_bak</span><br><span class="line"><span class="meta">#</span><span class="bash"> 以下语句,若出现提示信息时,全部选y</span></span><br><span class="line">yum install gcc openssl-devel pam-devel rpm-build</span><br><span class="line">wget http://mirror.internode.on.net/pub/OpenBSD/OpenSSH/portable/openssh-7.2p2.tar.gz</span><br><span class="line">tar -zxvf openssh-7.2p2.tar.gz</span><br><span class="line">cd openssh-7.2p2</span><br><span class="line">./configure --prefix=/usr --sysconfdir=/etc/ssh --with-pam --with-zlib --with-md5-passwords</span><br><span class="line">rm -rf /etc/ssh</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"><span class="meta">#</span><span class="bash"> 出现提示信息,选y</span></span><br><span class="line">cp contrib/redhat/sshd.init /etc/init.d/sshd</span><br></pre></td></tr></table></figure>
+
+<p>接着：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p>查找<code>PermitRootLogin</code>，改成<code>PermitRootLogin yes</code>  </p>
+<p>查找<code>#UsePAM no</code>，改成<code>UsePAM yes</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/etc/init.d/sshd reload</span><br><span class="line">chkconfig --list|grep ssh</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>Linux系统</category>
+      </categories>
+      <tags>
+        <tag>CentOS</tag>
+        <tag>ssh升级</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DIY一款比较好用的批量转换工具【doc2HtmlTider】</title>
+    <url>/2009/08/23/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/doc2HtmlTider/</url>
+    <content><![CDATA[<p>在自已平时开发过程中很，经常需要做一些非常繁琐的事情，比如编写操作手册。操作手册有多种格式，我最经常见格式的就是pdf、chm或htm等。这里只针对htm作一些优化。</p>
+<p>通常Microsoft office本身有提供word转换成html文件的功能，不过无法进行批次转换,效率上不高。这里推荐使用doctohtml.exe这款工具，需要download的可以参考这里<a href="http://www.onlinedown.net/soft/77339.htm" target="_blank" rel="noopener">doc2Html.exe</a>.。</p>
+<p>这款工具软件的优点是替换速度快，但是产生出来的html文件又臭又长，整合后整个操作手册变得非常大。想想还是自已动手丰衣足食，于是我花了点时间写了个简单的优化工具。经测试，用它可以将产生后的文件缩减至原来的60%左右。效果还是看得见的。</p>
+<a id="more"></a>
+
+<p><strong>在Visual Studio 2005中</strong></p>
+<ol>
+<li>先新建一个WinForm工程,打开Form1.cs,先在view画面上拉两个textbox元件,三个按钮元件,两个label标签</li>
+<li>第一个textbox元件textbox1用来取得待替换文件夹路径,配上一个label标签Lable1”待替换文件夹”作为说明,第二个textbox元件textbox2作为替换进度列表显示,设置为Multiline模式,配上另一个Label标签Label2”替换进度”作为说明;另外,三个按钮元件:第一个按钮Button1用来开启文件夹浏览器,第二个按钮Button2用来执行替换动作,第三个按钮Button3用来关闭窗体.Form1.cs[Design]画面结果如下图所示:</li>
+</ol>
+<img src='/images/docHtmlTider.jpg'/>
+
+
+
+<ol start="3">
+<li><p>然后将其切换至code页面,编辑代码如下: </p>
+<p> Form1.cs</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * &lt;P&gt; Title: 常用工具包                   	     &lt;&#x2F;P&gt;	</span><br><span class="line"> * &lt;P&gt; Description: htm标签清理工具                &lt;P&gt;	</span><br><span class="line"> * &lt;P&gt; Copyright: Copyright (c) 2009-05-04	&lt;&#x2F;P&gt;	</span><br><span class="line"> * @author 一只蚂蚁</span><br><span class="line"> * @version 0.1 Original Design from design document.	</span><br><span class="line"> *&#x2F;</span><br><span class="line">using System;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line">using System.ComponentModel;</span><br><span class="line">using System.Data;</span><br><span class="line">using System.Drawing;</span><br><span class="line">using System.Text;</span><br><span class="line">using System.Windows.Forms;</span><br><span class="line">using System.IO;</span><br><span class="line">using System.Collections;</span><br><span class="line">using System.Text.RegularExpressions;</span><br><span class="line"></span><br><span class="line">namespace HtmlTidier</span><br><span class="line">&#123;</span><br><span class="line">    public partial class Form1 : Form</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 建构方法</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        public Form1()</span><br><span class="line">        &#123;            </span><br><span class="line">            InitializeComponent();</span><br><span class="line">            &#x2F;&#x2F;readonly</span><br><span class="line">            this.textBox1.ReadOnly &#x3D; true;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;待替换文件夾</span><br><span class="line">        private string _folder;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 取得待替换文件夹路径</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;sender&quot;&gt;按钮物件&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;e&quot;&gt;事件&lt;&#x2F;param&gt;</span><br><span class="line">        private void button1_Click(object sender, EventArgs e)</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F;开启文件夹浏览器</span><br><span class="line">            FolderBrowserDialog path &#x3D; new FolderBrowserDialog();</span><br><span class="line">            path.ShowDialog();</span><br><span class="line">            this.textBox1.Text &#x3D; path.SelectedPath;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 执行替换</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        public void doReplace()</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F;刪除所有png档案</span><br><span class="line">            string[] fileLists &#x3D; Directory.GetFiles(_folder, @&quot;*.png&quot;, SearchOption.AllDirectories);           </span><br><span class="line">            foreach ( string newFile in fileLists )</span><br><span class="line">            &#123;</span><br><span class="line">                &#x2F;&#x2F;执行</span><br><span class="line">                File.Delete(newFile);</span><br><span class="line">                doShow(newFile, &quot;已删除!&quot;);</span><br><span class="line">                &#x2F;&#x2F;updata panel</span><br><span class="line">                this.Update();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;删除fileList.xml中的png图片结点</span><br><span class="line">            fileLists &#x3D; Directory.GetFiles(_folder, @&quot;*.xml&quot;, SearchOption.AllDirectories);</span><br><span class="line">            foreach ( string newFile in fileLists )</span><br><span class="line">            &#123;</span><br><span class="line">                string s &#x3D; ReadFile(newFile);</span><br><span class="line">                WriteFile(newFile, doXMLReplace(s));</span><br><span class="line">                doShow(newFile, &quot;已替换完成!&quot;);</span><br><span class="line">                &#x2F;&#x2F;update panel</span><br><span class="line">                this.Update();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;清理htm文件</span><br><span class="line">            fileLists &#x3D; Directory.GetFiles(_folder, @&quot;*.htm&quot;, SearchOption.AllDirectories);</span><br><span class="line">            foreach ( string newFile in fileLists )</span><br><span class="line">            &#123;</span><br><span class="line">                string s &#x3D; ReadFile(newFile);</span><br><span class="line">                WriteFile(newFile, doHtmlReplace(s));</span><br><span class="line">                doShow(newFile, &quot;已替换完成!&quot;);</span><br><span class="line">                &#x2F;&#x2F;update panel</span><br><span class="line">                this.Update();</span><br><span class="line">            &#125;            </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 实时显示</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;_path&quot;&gt;文件路径&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;mess&quot;&gt;提示信息&lt;&#x2F;param&gt;</span><br><span class="line">        public void doShow(string _path,string mess)</span><br><span class="line">        &#123;</span><br><span class="line">            this.textBox2.Text &#x3D; _path + mess + &quot;&#x2F;r&#x2F;n&quot; + this.textBox2.Text;</span><br><span class="line">            this.textBox2.ScrollToCaret();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 执行替换动作</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;sender&quot;&gt;按钮物件&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;e&quot;&gt;事件&lt;&#x2F;param&gt;</span><br><span class="line">        private void button2_Click(object sender, EventArgs e)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            _folder &#x3D; this.textBox1.Text;</span><br><span class="line">            &#x2F;&#x2F;文件夾為空</span><br><span class="line">            if ( string.IsNullOrEmpty(_folder) )</span><br><span class="line">            &#123;</span><br><span class="line">                MessageBox.Show(&quot;请选择待替换文件夹!&quot;, &quot;提示!&quot;);</span><br><span class="line">                return;</span><br><span class="line">            &#125;              </span><br><span class="line">            &#x2F;&#x2F;替換</span><br><span class="line">            doReplace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; htm标签替换</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;s&quot;&gt;待替换的内容&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;returns&gt;替换后的内容&lt;&#x2F;returns&gt;</span><br><span class="line">        public string doHtmlReplace(string s)</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F;s &#x3D; s.Replace(&quot;待處理表單操作手冊&quot;, &quot;&quot;);</span><br><span class="line">            s &#x3D; Regex.Replace(s, @&quot;&lt;!--&#x2F;[if gte vml 1&#x2F;][^!]+&lt;!&#x2F;[endif&#x2F;]--&gt;&quot;, &quot;&quot;);</span><br><span class="line">            s &#x3D; Regex.Replace(s, @&quot;&lt;!&#x2F;[if !vml&#x2F;]&gt;&quot;, &quot;&quot;);            </span><br><span class="line">            s &#x3D; Regex.Replace(s, @&quot;&#x2F;&quot;&quot;&gt;&lt;!&#x2F;[endif&#x2F;]&gt;&quot;, &quot;&#x2F;&quot;&gt;&quot;);</span><br><span class="line">            return s;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; fileList.xml替换</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;s&quot;&gt;待替换的内容&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;returns&gt;替换后的内容&lt;&#x2F;returns&gt;</span><br><span class="line">        public string doXMLReplace(string s)</span><br><span class="line">        &#123;</span><br><span class="line">            return Regex.Replace(s, @&quot;&lt;o:File[^&gt;]+png[^&gt;]+&gt;&#x2F;s+&quot;, &quot;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 关闭窗口</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;sender&quot;&gt;按钮物件&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;e&quot;&gt;事件&lt;&#x2F;param&gt;</span><br><span class="line">        private void button3_Click(object sender, EventArgs e)</span><br><span class="line">        &#123;</span><br><span class="line">            this.Close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 读文件</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;Path&quot;&gt;文件路径&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;returns&gt;文件内容&lt;&#x2F;returns&gt;</span><br><span class="line">        private string ReadFile(string _path)</span><br><span class="line">        &#123;</span><br><span class="line">            string s &#x3D; &quot;&quot;;</span><br><span class="line">            &#x2F;&#x2F;不存在</span><br><span class="line">            if ( !File.Exists(_path) )</span><br><span class="line">            &#123;</span><br><span class="line">                s &#x3D; &quot;不存在相应的目录&quot;;</span><br><span class="line">            &#125;            </span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                StreamReader f2 &#x3D; new StreamReader(_path, Encoding.GetEncoding(&quot;big5&quot;));</span><br><span class="line">                s &#x3D; f2.ReadToEnd();</span><br><span class="line">                f2.Close();</span><br><span class="line">                f2.Dispose();</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;返回</span><br><span class="line">            return s;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; 写文件</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;Path&quot;&gt;文件路径&lt;&#x2F;param&gt;</span><br><span class="line">        &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;Strings&quot;&gt;文件内容&lt;&#x2F;param&gt;</span><br><span class="line">        private void WriteFile(string _path, string content)</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F;不存在</span><br><span class="line">            if ( !File.Exists(_path) )</span><br><span class="line">            &#123;</span><br><span class="line">                FileStream f &#x3D; File.Create(_path);</span><br><span class="line">                f.Close();</span><br><span class="line">                f.Dispose();</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;StreamWriter</span><br><span class="line">            StreamWriter f2 &#x3D; new StreamWriter(_path, false, Encoding.GetEncoding(&quot;big5&quot;));</span><br><span class="line">            f2.WriteLine(content);</span><br><span class="line">            f2.Close();</span><br><span class="line">            f2.Dispose();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>编译=&gt;运行….bingo!!!</strong> </p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+        <tag>批量转换</tag>
+        <tag>C#</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>65个源代码网站</title>
+    <url>/2009/11/20/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/opens-wbsite/</url>
+    <content><![CDATA[<p>1.51源码：<a href="http://www.51aspx.com/" target="_blank" rel="noopener">http://www.51aspx.com/</a><br>2.源码之家：<a href="http://www.codejia.com/" target="_blank" rel="noopener">http://www.codejia.com/</a><br>3.源码网：<a href="http://www.codepub.com/" target="_blank" rel="noopener">http://www.codepub.com/</a><br>4.虾客源码：<a href="http://www.xkxz.com/" target="_blank" rel="noopener">http://www.xkxz.com/</a><br>5.源码开发网：<a href="http://www.codedn.com/" target="_blank" rel="noopener">http://www.codedn.com/</a></p>
+<a id="more"></a>
+
+<p>6.洪越源代码：<a href="http://www.softhy.net/" target="_blank" rel="noopener">http://www.softhy.net/</a><br>7.锋网源码：<a href="http://www.fwvv.net/" target="_blank" rel="noopener">http://www.fwvv.net/</a><br>8.代码爱好者：<a href="http://www.codefans.com/" target="_blank" rel="noopener">http://www.codefans.com/</a><br>9.爱源码：<a href="http://www.aiyuanma.com/" target="_blank" rel="noopener">http://www.aiyuanma.com/</a><br>10.酷源码：<a href="http://www.kyuanma.com/" target="_blank" rel="noopener">http://www.kyuanma.com/</a><br>11.搜源码：<a href="http://www.soucode.com/" target="_blank" rel="noopener">http://www.soucode.com/</a><br>12.拉基源码：<a href="http://www.lajicode.com/" target="_blank" rel="noopener">http://www.lajicode.com/</a><br>13.源软中国：<a href="http://www.600it.com/" target="_blank" rel="noopener">http://www.600it.com/</a><br>14.源码天空：<a href="http://www.codesky.net/" target="_blank" rel="noopener">http://www.codesky.net/</a><br>15.源码吧：<a href="http://www.asp88.net/" target="_blank" rel="noopener">http://www.asp88.net/</a><br>16.绿色源码：<a href="http://code888.cn/" target="_blank" rel="noopener">http://code888.cn/</a><br>17.9号源码中心：<a href="http://www.9code.com/" target="_blank" rel="noopener">http://www.9code.com/</a><br>18.网馨源码：<a href="http://www.asppsa.com/" target="_blank" rel="noopener">http://www.asppsa.com/</a><br>20.源码天下：<a href="http://www.pccode.net/" target="_blank" rel="noopener">http://www.pccode.net/</a><br>21.需要源码：<a href="http://www.needcode.cn/（感觉不错！）" target="_blank" rel="noopener">http://www.needcode.cn/（感觉不错！）</a><br>22.华夏源码：<a href="http://www.haocpu.com/" target="_blank" rel="noopener">http://www.haocpu.com/</a><br>23.天新网：<a href="http://codes.21tx.com/" target="_blank" rel="noopener">http://codes.21tx.com/</a><br>24.源码网：<a href="http://www.yuanma5.com/（感觉不错！）" target="_blank" rel="noopener">http://www.yuanma5.com/（感觉不错！）</a><br>25.无忧源码：<a href="http://www.5uym.com/（有演示地址）" target="_blank" rel="noopener">http://www.5uym.com/（有演示地址）</a><br>26.中国下载站：<a href="http://www.cnz.cc/" target="_blank" rel="noopener">http://www.cnz.cc/</a><br>27.资源吧：<a href="http://www.ziyuan8.com/" target="_blank" rel="noopener">http://www.ziyuan8.com/</a><br>28.启明星源码：<a href="http://www.codewww.com/" target="_blank" rel="noopener">http://www.codewww.com/</a><br>29.我要源码：<a href="http://www.xia51.com/" target="_blank" rel="noopener">http://www.xia51.com/</a><br>30.清秋源码：<a href="http://www.asp678.com/" target="_blank" rel="noopener">http://www.asp678.com/</a><br>31.万润源码：<a href="http://www.mwzv.com/" target="_blank" rel="noopener">http://www.mwzv.com/</a><br>32.代码秀：<a href="http://www.39g.com/" target="_blank" rel="noopener">http://www.39g.com/</a><br>33.中文天下源码站：<a href="http://www.zwsky.net/" target="_blank" rel="noopener">http://www.zwsky.net/</a><br>34.世纪源码：<a href="http://www.sjcodes.com/" target="_blank" rel="noopener">http://www.sjcodes.com/</a><br>35.源码300：<a href="http://www.ym300.com/" target="_blank" rel="noopener">http://www.ym300.com/</a><br>36.问友源码：<a href="http://www.winu.cn/" target="_blank" rel="noopener">http://www.winu.cn/</a><br>37.梦想源码：<a href="http://gjj.cc/ZongHe/ZiXun/52086.htm" target="_blank" rel="noopener">http://gjj.cc/ZongHe/ZiXun/52086.htm</a><br>38.源码联盟：<a href="http://www.aspsun.com/" target="_blank" rel="noopener">http://www.aspsun.com</a><br>39.168源码：<a href="http://www.168code.com/" target="_blank" rel="noopener">http://www.168code.com/</a><br>40.源码大全：<a href="http://www.2007boys.cn/" target="_blank" rel="noopener">http://www.2007boys.cn/</a><br>41.易搜源码：<a href="http://www.yscode.com/" target="_blank" rel="noopener">http://www.yscode.com/</a><br>42.下吧源码：<a href="http://www.xia8.com/" target="_blank" rel="noopener">http://www.xia8.com/</a><br>43.早雪网：<a href="http://www.zaoxue.com/" target="_blank" rel="noopener">http://www.zaoxue.com</a><br>44.我要下源码：<a href="http://www.51xia.net/" target="_blank" rel="noopener">http://www.51xia.net/</a><br>45.54源码：<a href="http://www.54code.com/" target="_blank" rel="noopener">http://www.54code.com/</a><br>46.久久源码：<a href="http://www.99code.net/" target="_blank" rel="noopener">http://www.99code.net</a><br>47.中国web开发者网络：<a href="http://www.webasp.net/" target="_blank" rel="noopener">http://www.webasp.net/</a><br>48.源码之家：<a href="http://www.mycodes.net/" target="_blank" rel="noopener">http://www.mycodes.net/</a><br>49.新E家源码：<a href="http://www.92e.net/" target="_blank" rel="noopener">http://www.92e.net/</a><br>50.中国源码下载站：<a href="http://www.downcode.com/" target="_blank" rel="noopener">http://www.downcode.com/</a><br>51.第四源码：<a href="http://www.asp4.cn/" target="_blank" rel="noopener">http://www.asp4.cn/</a><br>52.asp1源码：<a href="http://www.asp1.com.cn/" target="_blank" rel="noopener">http://www.asp1.com.cn/</a><br>53.华南源码：<a href="http://www.fjcode.cn/" target="_blank" rel="noopener">http://www.fjcode.cn</a><br>54.源码分享：<a href="http://www.codeftp.cn/" target="_blank" rel="noopener">http://www.codeftp.cn/</a><br>55.好源码：<a href="http://www.haocodes.com/" target="_blank" rel="noopener">http://www.haocodes.com/</a><br>56.算法源码吧：<a href="http://www.sfcode.cn/（有意思！）" target="_blank" rel="noopener">http://www.sfcode.cn/（有意思！）</a><br>57.龙都源码：<a href="http://www.londu.net/" target="_blank" rel="noopener">http://www.londu.net/</a><br>58.精华源码：<a href="http://www.jhdown.com/" target="_blank" rel="noopener">http://www.jhdown.com/</a><br>59.逆流源码：<a href="http://www.niliu.cn/" target="_blank" rel="noopener">http://www.niliu.cn/</a><br>60.中国源码教程网：<a href="http://www.kuziyuan.com/" target="_blank" rel="noopener">http://www.kuziyuan.com/</a><br>61.源代码：<a href="http://www.fgfg.net/" target="_blank" rel="noopener">http://www.fgfg.net/</a><br>62.源码中国：<a href="http://www.cn700.com/" target="_blank" rel="noopener">http://www.cn700.com/</a><br>63.怀化源码网：<a href="http://www.xp90.com/sort/242_1.html" target="_blank" rel="noopener">http://www.xp90.com/sort/242_1.html</a><br>64.中国源码之家：<a href="http://www.chcode.net/" target="_blank" rel="noopener">http://www.chcode.net/</a><br>65.侠载源码：<a href="http://www.xiacode.com/" target="_blank" rel="noopener">http://www.xiacode.com/</a></p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>源码网</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常用的注册码及序列号</title>
+    <url>/2009/08/23/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/sncode/</url>
+    <content><![CDATA[<p>这些都是本人平时作开发的过程中需要用到的一部份软件，感谢部份网友无私地提供注册码，现将其整理如下: </p>
+<blockquote>
+<p>注意：时间有点久了，有些不一定能用</p>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="EditPlus注册码"><a href="#EditPlus注册码" class="headerlink" title="EditPlus注册码:"></a>EditPlus注册码:</h3><p>Name:crsky<br>Code:7879E-5BF58-7DR23-DAOB2-7DR30</p>
+<h3 id="UltraEdit32-v13-10版注冊码"><a href="#UltraEdit32-v13-10版注冊码" class="headerlink" title="UltraEdit32 v13.10版注冊码"></a>UltraEdit32 v13.10版注冊码</h3><p>Name:6个空格 (注意是空格)<br>Code:K8Q1A-V1N5Z-X4G1Y-K0F4G-H8D56-15H8y</p>
+<h3 id="UltraCompare-Profession-v6注冊码"><a href="#UltraCompare-Profession-v6注冊码" class="headerlink" title="UltraCompare Profession v6注冊码"></a>UltraCompare Profession v6注冊码</h3><p>Name：3ddown<br>Code：NXLH3-IMPMD-JINOI-RKTHM-NGFLC-GHKFV-DSQLO-GDOV6</p>
+<h3 id="Visual-CHM-4-10-或者3-10版本-注册版注册码："><a href="#Visual-CHM-4-10-或者3-10版本-注册版注册码：" class="headerlink" title="Visual CHM 4.10(或者3.10版本)注册版注册码："></a>Visual CHM 4.10(或者3.10版本)注册版注册码：</h3><p>Name:zhucema<br>Code:IHIDRWELLS</p>
+<h3 id="VMware-Workstation序列號"><a href="#VMware-Workstation序列號" class="headerlink" title="VMware Workstation序列號:"></a>VMware Workstation序列號:</h3><h4 id="5-5版"><a href="#5-5版" class="headerlink" title="5.5版"></a>5.5版</h4><p>YLT64-MKFFG-8A1DY-4M8ZK<br>LCT4T-24GFE-A816V-4MTQQ<br>HKXHD-KUN0G-HA5DF-4MTZ2</p>
+<h4 id="6-0版"><a href="#6-0版" class="headerlink" title="6.0版"></a>6.0版</h4><p>A8HC7-1GGR0-E4PD4-4T694<br>YLT64-MKFFG-8A1DY-4M8ZK</p>
+<h3 id="BB-FlashBack-Pro-2-62版-录像制作专家"><a href="#BB-FlashBack-Pro-2-62版-录像制作专家" class="headerlink" title="BB FlashBack Pro 2.62版(录像制作专家)"></a>BB FlashBack Pro 2.62版(录像制作专家)</h3><p><a href="http://www.crsky.com/soft/2744.html" target="_blank" rel="noopener">下载地址</a><br>Name : 任意<br>code:2SX72-MIG9C-NX5V3-S4TL3-4B4V</p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>注册码</tag>
+        <tag>序列号</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>相对完整的软件测试工具手册</title>
+    <url>/2010/03/23/%E6%B5%8B%E8%AF%95/unittest/</url>
+    <content><![CDATA[<blockquote>
+<p>本文转载自 <a href="http://spaces.msn.com/cdyblog/" target="_blank" rel="noopener">http://spaces.msn.com/cdyblog/</a> 【侵删】</p>
+</blockquote>
+<p><strong>1. 从测试功能上分</strong><br>（1） 单元测试<br>针对不同语言，如JUNIT<br>（2） 功级测试<br>E—Test：功能强大，由于不是采用POST URL的方式回放脚本，所以可以支持多内码的测试数据（当然要程序支持），基本上可以应付大部分的WEB SITE。<br>MI公司的WINRUNNER<br>COMPUWARE的QARUN<br>RATIONAL的SQA ROBOT</p>
+<a id="more"></a>
+
+<p>（3） 压力测试<br>MI公司的WINLOAD<br>COMPUWARE的QALOAD<br>RATIONAL的SQA LOAD<br>（4） 负载测试<br>LOADRUNNER<br>RATIONAL VISUAL QUANTIFY<br>（5） WEB测试工具<br>MI公司的ASTRA系列<br>RSW公司的E—TEST SUITE等<br>（6） WEB系统测试工具<br>WORKBENCH<br>WEB APPLICATION STRESS TOOL（WAS）<br>（7） 数据库测试工具<br>TESTBYTES<br>（8） 回归测试工具<br>RATIONAL TEAM TEST<br>WINRUNNER<br>（9） 嵌入式测试工具<br>ATTOLTESTWARE。是ATTOLTESTWARE公司的自动生成测试代码的软件测试工具，特别适用于嵌入式实时应用软件单元和通信系统测试。<br>CODETEST是AppliedMicrosystemsCorp.公司的产品,是广泛应用的嵌入式软件在线测试工具。<br>GammaRay。GammaRay系列产品主要包括软件逻辑分析仪GammaProfiler、可靠性评测工具GammaRET等。<br>LogiScope是TeleLogic公司的工具套件，用于代码分析、软件测试、覆盖测试。<br>LynxInsure++是LynxREAL-TIMESYSTEMS公司的产品，基于LynxOS的应用代码检测与分析测试工具。<br>MessageMaster是ElviorLtd.公司的产品，测试嵌入式软件系统工具，向环境提供基于消息的接口。<br>VectorCast是VectorSoftware.Inc公司的产品。由6个集成的部件组成，自动生成测试代码，为主机和嵌入式环境构造可执行的测试架构。<br>（10） 系统性能测试工具<br>Rational Performance<br>（11） 页面链接测试<br>Link Sleuth<br>（12） 测试流程管理工具<br>Test Plan Control<br>（13） 测试管理工具<br>TestDirector<br>Rational公司的Test Manager<br>Compuware公司的QADirector<br>TestExpert：是Silicon Valley Networks公司产品的测试管理工具，能管理整个测试过程，从测试计划、测试例程、测试执行到测试报告。<br>（14） 缺陷跟踪工具<br>TrackRecord等<br>（15） 其他测试工具包<br>TestVectorGenerationSystem是T—VECTechnologies公司的产品。提供自动模型分析、测试生成、测试覆盖分析和测试执行的完整工具包，具有方便的用户接口和完备的文档支持。<br>TestQuestPro是TestQuest公司的非插入码式的自动操纵测试工具，提供一种高效的自动检测目标系统，获取其输出性能的测试方法。<br>TestWorks是SoftwareResearch.Inc公司的一整套软件测试工具，既可单独使用，也可捆绑销售使用。<br><strong>2、 从测试的方法上分</strong><br>（1） 白盒测试工具<br>白盒测试工主要有：Numega、PuRe、软件纠错工具（Rational Purify）。<br>内存资源泄漏检查：<br>Numega中的BounceChecher<br>Rational的 Purify等<br>代码覆盖率检查：<br>Numega的TrueCoverage<br>Rational的PureCoverage<br>TeleLogic公司的LogiScope<br>Macabe公司的Macabe<br>代码性能检查：<br>Numega的TrueTime<br>Rational的Quantify等<br>代码静态度量分析度量检查工具：LogiScope和Macabe等<br>黑盒测试工具主要有：QACenter、SQATeamTest、Rational Visual Visual Test。<br>QACenter：QACenter帮助所有测试人员创建一个快速、可重用的测试过程。这些测试工具自动帮助管理测试过程、快速分析和调试程序，包括针对回归、强度、单元、并发、集成、移植，容量和负载建立测试用例，自动执行测试和产生文档结果。QACenter主要包括以下几个模块：<br>QARun：应用的功能测试工具。<br>QALoad：强负载下应用的性能测试工具。<br>QADirector：测试的组织设计和创建以及管理工具。<br>TrackRecord：集成的缺陷跟踪管理工具。<br>EcoTools：高层次的性能监测工具。</p>
+<p><strong>3、部分具体测试工具的介绍</strong><br>（1）、性能优化工具EcoScope<br>EcoScope 是一套定位于应用（即服务提供者本身）及其所依赖的所有网络计算资源的解决方案。EcoScope可以提供应用视图，并标出应用是如何与基础架构相关联 的。这种视图是其他网络管理工具所不能提供的。EcoScope能解决在大型企业复杂环境下分析与测量应用性能的难题。通过提供应用的性能级别及其支撑架 构的信息，EcoScope能帮助IT部门就如何提高应用性能提出多方面的决策方案。<br>EcoScope的应用主要表现在以下几个方面：<br>确保成功部署新应用<br>维护性能的服务水平<br>加速问题检测与纠正的高级功能<br>定制视图有助于高效地分析数据<br>（2）、数据库测试数据自动生成工具——TestBytes<br>在 数据库开发的过程中，为了测试应用程序对数据库的访问，应当在数据库中生成测试用例数据，我们可能会发现当数据库中只有少量数据时，程序可能没有问题，但 是当真正投入到运用中产生了大量数据时就出现问题了，这往往是因为程序的编写没有达到，所以一定及早地通过在数据库中生成大量数据来帮助开发人员完善这部 分功能和性能。<br>TestBytes是一个用于自动生成测试数据的强大易用的工具，通过简单的点击式操作，就可以确定需要生成的数据类型（包括特殊 字符的定制），并通过与数据库的连接来自动生成数百万行正确的测试数据，可以极大地提高数据库开发人员、QA测试人员、数据仓库开发人员、应用开发人员的 工作效率。<br>（3）、PC—LINT<br>PC—LINT 主要进行更严格的语法检查功能，还完成相当程度的语义检查功能。可以这样认为：PC—LINT是一个更加智能、更加严格的编译器。PC—LINT在实现语 法和某些语义规则检查时，是通过参数配置完成的，它的选项就有数百个之多，因此，在使用PC—LINT过程中，了解选项的含义也很重要。<br>（4）、TCL<br>TCL是Tool Command Language的缩写，它是一种很流行的脚本解释器，尤其在测试领域，它的最大特点是可移植性好，接口简单，方便，可以很容易地嵌入到软件中，作为自己的解释器使用。<br>TCL提供两种接口：编程接口和用户接口。编程接口是通过LIB或DLL形式提供的，提供了一些函数（命令）供调用，包括：分配一个解释器指针（对象）；初始化解释器（指针）；注册扩展函数等。用户接口很简单，即编写的脚本，脚本里面包含对扩展命令的调用。<br>（5）VB测试工具：VB Watch<br>（6）Java 程序的测试工具<br>1）Bean—Test<br>2）EJBQuickTest<br>3）JStyle<br>4）JTest<br>5）HttpUnit<br>6）JUnit<br>（7）、覆盖测试<br>C—Cover<br>C—Cover是一个测试工具软件，用来找出没有被测到的代码，并报告测试的覆盖率。C—Cover</p>
+<p>只支持C/C++的代码覆盖率分析，其它语言不支持。但不受OS的限制。</p>
+<hr>
+<p>单元测试方面：（对开发人员比较有用） J-Unit工具。<br> 功能测试方面：E-test是个不错的选择，功能很强大，由于不是采用Post URL的方式回放脚本，所以可以支持多内码的测试数据（当然要程序支持）。基本上可以应付大部分的Web Site。<br> 如果只是利用脚本回放代替手工劳动，或者做对页面响应数的性能测试，Microsoft Web Application Stress Tool是个不错的选择。<br>  另外，在性能测试方面，PureLoad也是一个不错的工具，完全用Java写成，可以测试各种C/S程序，如SMTP Server等。这两个工具都是使用Post URL的方法测试Web Application的。对大量使用JavaScript的页面不太适合。当然，如果程序在Unix，linux下面运行的话，可以直接编写Shell 脚本程序，更加方便。<br> 另外，还有很多专门的工具，比如说Linkbot是专门作页面链接测试的。<br> 另外，测试流程管理工具也有不 少，个人用过也一直在用的是Test Plan Control，短小精悍，不错。  至于WinRunner和LoadRunner之类，因为没有License，所以都没怎么用过，惭愧。不过我看过一篇英国人评价英国测试市场上最流行 的五个软件的文章。WinRunner得分最高。<br> 测试工具从测试的方法上可以分为两种：白盒测试和黑盒测试  白盒测试工具主要有：<br> 内存资源泄漏检查：Numega中的bouncechecker,Rational的Purify等<br>  代码覆盖率检查：Numega中的truecoverage,Rational的Purecoverage，Telelogic公司的 logiscope, Macabe公司的Macabe等  代码性能检查：Numega中的truetime,Rational的Quantify等<br> 代码静态度量分析质量检查工具：logiscope和Macabe等<br> 黑盒测试工具主要有：  客户端功能测试：MI公司的winrunner,compuware的qarun,Rational的SQA robot等等<br> 服务器端压力性能测试： MI公司的winload,compuware的qaload,Rational的SQA load等等<br> Web测试工具：MI公司的Astra系列，rsw公司的e-test suite等等<br> 测试管理工具：rational的test manager,compuware的qadirector等等，此外还有缺陷跟踪工具 trackrecord等。<br> 数据库测试工具:TestBytes<br> 黑盒测试工具：QACenter、SQATeamTest，Rational Viaual Test。<br> 回归测试工具：Rational TeamTest，WinRunner（MI公司）<br> WEB系统测试工具：TEST，Workberch，Web Appication Stress Tool（WAS）<br> 白盒测试工具：Numega 、PuRe、软件纠错工具（Rational Purity）。<br> 嵌入式测试工具：Logiscope（静态测试工具）、CodeTest。<br> 系统负荷测试工具：RationalPerformance<br> 涵盖测试工具范围评估工具<br> 软件性能测试工具：LoadRunner（MI产品）、Rational Visual Qantify<br> 测试管理工具：TestDirector（MI产品支持整个生命周期中测试流程管理）</p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+        <tag>软件测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ASP.NET导出Crystal Report水晶报表功能实现代码</title>
+    <url>/2009/11/19/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/CSharp/donet-crystal/</url>
+    <content><![CDATA[<ol>
+<li><p>先在Web.config文件中做如下配置【Web.config】</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">configSections</span>&gt;</span></span><br><span class="line">		.......</span><br><span class="line">	<span class="tag">&lt;<span class="name">appSettings</span>&gt;</span></span><br><span class="line">		...</span><br><span class="line">        <span class="comment">&lt;!--报表服务器--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">add</span> <span class="attr">key</span>=<span class="string">"rptSeverName"</span> <span class="attr">value</span>=<span class="string">"localhost"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">add</span> <span class="attr">key</span>=<span class="string">"rptUser"</span> <span class="attr">value</span>=<span class="string">"testId"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">add</span> <span class="attr">key</span>=<span class="string">"rptPwd"</span> <span class="attr">value</span>=<span class="string">"testPwd"</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">appSettings</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">connectionStrings</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">system.web</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">compilation</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">assemblies</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!--此处为报表所需之assembly--&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">add</span> <span class="attr">assembly</span>=<span class="string">"CrystalDecisions.CrystalReports.Engine, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"</span>/&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">add</span> <span class="attr">assembly</span>=<span class="string">"CrystalDecisions.ReportSource, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"</span>/&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">add</span> <span class="attr">assembly</span>=<span class="string">"CrystalDecisions.Shared, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"</span>/&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">add</span> <span class="attr">assembly</span>=<span class="string">"CrystalDecisions.Web, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"</span>/&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">add</span> <span class="attr">assembly</span>=<span class="string">"CrystalDecisions.ReportAppServer.ClientDoc, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"</span>/&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">add</span> <span class="attr">assembly</span>=<span class="string">"CrystalDecisions.Enterprise.Framework, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"</span>/&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">add</span> <span class="attr">assembly</span>=<span class="string">"CrystalDecisions.Enterprise.InfoStore, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"</span>/&gt;</span></span><br><span class="line">				...<span class="tag">&lt;/<span class="name">assemblies</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">compilation</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">system.web</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>报表导出处理页面【report.aspx】</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">Page</span> <span class="attr">Language</span>=<span class="string">"C#"</span> <span class="attr">AutoEventWireup</span>=<span class="string">"true"</span> <span class="attr">CodeFile</span>=<span class="string">"report.aspx.cs"</span> <span class="attr">Inherits</span>=<span class="string">"report"</span> %&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">Register</span> <span class="attr">Assembly</span>=<span class="string">"CrystalDecisions.Web, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">Namespace</span>=<span class="string">"CrystalDecisions.Web"</span> <span class="attr">TagPrefix</span>=<span class="string">"CR"</span> %&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span> <span class="meta-keyword">PUBLIC</span> <span class="meta-string">"-//W3C//DTD XHTML 1.0 Transitional//EN"</span> <span class="meta-string">"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1999/xhtml"</span> &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span> <span class="attr">runat</span>=<span class="string">"server"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>显示报表<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">"/aspnet_client/System_Web/2_0_50727/CrystalReportWebFormViewer3/css/default.css"</span> <span class="attr">mce_href</span>=<span class="string">"aspnet_client/System_Web/2_0_50727/CrystalReportWebFormViewer3/css/default.css"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">"form1"</span> <span class="attr">runat</span>=<span class="string">"server"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">align</span>=<span class="string">center</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">cr:crystalreportviewer</span> <span class="attr">id</span>=<span class="string">"CrystalReportViewer"</span> <span class="attr">runat</span>=<span class="string">"server"</span> <span class="attr">autodatabind</span>=<span class="string">"true"</span> <span class="attr">Height</span>=<span class="string">"50px"</span> <span class="attr">Width</span>=<span class="string">"350px"</span> <span class="attr">DisplayGroupTree</span>=<span class="string">"False"</span>&gt;</span><span class="tag">&lt;/<span class="name">cr:crystalreportviewer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>报表导出处理后台逻辑代码【report.asp.cs】</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">using System;</span><br><span class="line">using System.Data;</span><br><span class="line">using System.Configuration;</span><br><span class="line">using System.Collections;</span><br><span class="line">using System.Web;</span><br><span class="line">using System.Web.Security;</span><br><span class="line">using System.Web.UI;</span><br><span class="line">using System.Web.UI.WebControls;</span><br><span class="line">using System.Web.UI.WebControls.WebParts;</span><br><span class="line">using System.Web.UI.HtmlControls;</span><br><span class="line">using CrystalDecisions.CrystalReports.Engine;</span><br><span class="line">using CrystalDecisions.Shared;</span><br><span class="line">using Com.Everunion.Util;</span><br><span class="line"></span><br><span class="line">public partial class report : System.Web.UI.Page</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F;报表档案</span><br><span class="line">    private ReportDocument reportdoc;</span><br><span class="line">    &#x2F;&#x2F;log</span><br><span class="line">    private static readonly log4net.ILog log &#x3D; log4net.LogManager.GetLogger(typeof(report));</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">    &#x2F;&#x2F;&#x2F; 加載</span><br><span class="line">    &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">    &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;sender&quot;&gt;物件&lt;&#x2F;param&gt;</span><br><span class="line">    &#x2F;&#x2F;&#x2F; &lt;param name&#x3D;&quot;e&quot;&gt;事件&lt;&#x2F;param&gt;</span><br><span class="line">    protected void Page_Load(object sender, EventArgs e)</span><br><span class="line">    &#123;</span><br><span class="line">        ConfigureCrystalReports();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;&#x2F; &lt;summary&gt;</span><br><span class="line">    &#x2F;&#x2F;&#x2F; 设定报表信息</span><br><span class="line">    &#x2F;&#x2F;&#x2F; &lt;&#x2F;summary&gt;</span><br><span class="line">    private void ConfigureCrystalReports()</span><br><span class="line">    &#123;</span><br><span class="line">        reportdoc &#x3D; new ReportDocument();</span><br><span class="line">        string rptName &#x3D; Request.Params[&quot;rpt&quot;];</span><br><span class="line">        string reportPath &#x3D; Server.MapPath(&quot;rpt&#x2F;&quot; + rptName);</span><br><span class="line">        reportdoc.Load(reportPath);</span><br><span class="line">        &#x2F;&#x2F;设定参数</span><br><span class="line">        for ( int i &#x3D; 0; i &lt; reportdoc.ParameterFields.Count; i ++ )</span><br><span class="line">        &#123;</span><br><span class="line">            string key &#x3D; reportdoc.ParameterFields[i].Name;</span><br><span class="line">            reportdoc.SetParameterValue(key, StringUtil.ToStr(Request.Params[key]));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		&#x2F;&#x2F;取得报表DataSource连接参数</span><br><span class="line">		String rptServerName &#x3D; ConfigurationManager.AppSettings[&quot;rptSeverName&quot;].ToString();</span><br><span class="line">        String rptUser &#x3D; ConfigurationManager.AppSettings[&quot;rptUser&quot;].ToString();</span><br><span class="line">        String rptPwd &#x3D; ConfigurationManager.AppSettings[&quot;rptPwd&quot;].ToString();        </span><br><span class="line">        &#x2F;&#x2F;设定数据源</span><br><span class="line">        TableLogOnInfo logonInfo &#x3D; new TableLogOnInfo();</span><br><span class="line">        foreach ( CrystalDecisions.CrystalReports.Engine.Table table in reportdoc.Database.Tables )</span><br><span class="line">        &#123;</span><br><span class="line">            logonInfo &#x3D; table.LogOnInfo;</span><br><span class="line">            logonInfo.ConnectionInfo.ServerName &#x3D; rptServerName;</span><br><span class="line">            logonInfo.ConnectionInfo.UserID &#x3D; rptUser;</span><br><span class="line">            logonInfo.ConnectionInfo.Password &#x3D; rptPwd;</span><br><span class="line">            table.ApplyLogOnInfo(logonInfo);</span><br><span class="line">        &#125;</span><br><span class="line">		</span><br><span class="line">		&#x2F;&#x2F;直接在浏览器上显示</span><br><span class="line">		&#x2F;&#x2F;CrystalReportViewer.ReportSource &#x3D; reportdoc;</span><br><span class="line"></span><br><span class="line">		&#x2F;&#x2F;导出至文件</span><br><span class="line">		&#x2F;&#x2F;报表类型</span><br><span class="line">        string rptType &#x3D; Request.Params[&quot;rptType&quot;].Trim();</span><br><span class="line">        &#x2F;&#x2F;报表名称</span><br><span class="line">        string filename &#x3D; rptName.Replace(&quot;.rpt&quot;, &quot;&quot;);</span><br><span class="line">        &#x2F;&#x2F;PDF格式</span><br><span class="line">        if ( rptType.ToUpper().Equals(&quot;PDF&quot;) )</span><br><span class="line">        &#123;</span><br><span class="line">            reportdoc.ExportToHttpResponse(ExportFormatType.PortableDocFormat, Response, true, filename);</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F;EXCEL格式</span><br><span class="line">        else if ( rptType.ToUpper().Equals(&quot;XLS&quot;) )</span><br><span class="line">        &#123;</span><br><span class="line">            reportdoc.ExportToHttpResponse(ExportFormatType.Excel, Response, true, filename);</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F;HTML格式</span><br><span class="line">        else if ( rptType.ToUpper().Equals(&quot;HTML&quot;) )</span><br><span class="line">        &#123;</span><br><span class="line">            reportdoc.ExportToHttpResponse(ExportFormatType.HTML32, Response, true, filename);</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F;DOC格式</span><br><span class="line">        else if ( rptType.ToUpper().Equals(&quot;DOC&quot;) )</span><br><span class="line">        &#123;</span><br><span class="line">            reportdoc.ExportToHttpResponse(ExportFormatType.WordForWindows, Response, true, filename);</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F;RTF格式</span><br><span class="line">        else if ( rptType.ToUpper().Equals(&quot;RTF&quot;) )</span><br><span class="line">        &#123;</span><br><span class="line">            reportdoc.ExportToHttpResponse(ExportFormatType.RichText, Response, true, filename);</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">            Response.Write(&quot;错误的报表格式:&quot; + rptType);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>調用方法: </p>
+<p><code>widow.open(&quot;report.aspx?rpt=sample.rpt&amp;rptType=xls&amp;params=....&quot;);</code></p>
+<p>其中：</p>
+<p>​    rpt–为水晶报表名称，后缀名为.rpt</p>
+<p>​    rptType–为报表导出类型，如: xls,pdf,doc,rtf等….</p>
+<p>​    params–为报表所需内部参数，根据报表参数需要自行添加</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
+        <tag>ASP.NET</tag>
+        <tag>Crystal Report</tag>
+        <tag>报表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JXL操作Excel实现代码</title>
+    <url>/2009/10/19/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Java/jxl/</url>
+    <content><![CDATA[<p>下面是一些利用jxl操作excel的方法,这个class不能直接用,只是一个模板,涉及到一些像是excel存储格格式,字体,颜色,存储格大小,文档名称之类的一些零星方法。</p>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * 产生Excel</span></span><br><span class="line"><span class="comment">       * <span class="doctag">@param</span> conn 资料库连结</span></span><br><span class="line"><span class="comment">       * <span class="doctag">@param</span> form 报价单查询Form</span></span><br><span class="line"><span class="comment">       * <span class="doctag">@return</span> byte[] excel内容</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">    <span class="keyword">public</span>  <span class="keyword">byte</span>[] getExcel(Connection conn, QuotationForm form)</span><br><span class="line">    &#123;          </span><br><span class="line">          <span class="comment">//初始化,字节流</span></span><br><span class="line">            ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            WritableWorkbook workbook = <span class="keyword">null</span>;</span><br><span class="line">            <span class="comment">//引用WritableWorkbook</span></span><br><span class="line">            workbook = Workbook.createWorkbook(baos);</span><br><span class="line">            <span class="comment">//引用WritableSheet,sheet名</span></span><br><span class="line">            WritableSheet sheet = workbook.createSheet(<span class="string">"报价单"</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//设置单元格的宽度</span></span><br><span class="line">              sheet.setColumnView(<span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">            sheet.setColumnView(<span class="number">1</span>, <span class="number">12</span>); </span><br><span class="line">            sheet.setColumnView(<span class="number">2</span>, <span class="number">15</span>);</span><br><span class="line">            sheet.setColumnView(<span class="number">3</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//详细资料字体            </span></span><br><span class="line">            WritableFont detail = <span class="keyword">new</span> WritableFont(WritableFont.createFont(<span class="string">"新细明体"</span>),<span class="number">10</span>,WritableFont.NO_BOLD,<span class="keyword">false</span>);</span><br><span class="line">            WritableCellFormat cellformat = <span class="keyword">new</span> WritableCellFormat(detail); </span><br><span class="line">            <span class="comment">//红色字体</span></span><br><span class="line">            WritableFont redInfo = <span class="keyword">new</span> WritableFont(WritableFont.createFont(<span class="string">"新细明体"</span>),<span class="number">10</span>,WritableFont.NO_BOLD,<span class="keyword">false</span>, jxl.format.UnderlineStyle.NO_UNDERLINE,jxl.format.Colour.RED);</span><br><span class="line">            WritableCellFormat redcellformat = <span class="keyword">new</span> WritableCellFormat(redInfo);</span><br><span class="line">            <span class="comment">//粉色字体</span></span><br><span class="line">            WritableFont pinkInfo = <span class="keyword">new</span> WritableFont(WritableFont.createFont(<span class="string">"新细明体"</span>),<span class="number">10</span>,WritableFont.NO_BOLD,<span class="keyword">false</span>,jxl.format.UnderlineStyle.NO_UNDERLINE,jxl.format.Colour.PINK);</span><br><span class="line">            WritableCellFormat pinkcellformat = <span class="keyword">new</span> WritableCellFormat(pinkInfo);</span><br><span class="line">            <span class="comment">//样式(居中)</span></span><br><span class="line">            cellformat.setAlignment(jxl.format.Alignment.CENTRE);</span><br><span class="line">            redcellformat.setAlignment(jxl.format.Alignment.CENTRE);</span><br><span class="line">            pinkcellformat.setAlignment(jxl.format.Alignment.CENTRE);</span><br><span class="line">            <span class="comment">//大标题           </span></span><br><span class="line">            WritableFont title = <span class="keyword">new</span> WritableFont(WritableFont.createFont(<span class="string">"新细明体"</span>), <span class="number">20</span>, WritableFont.BOLD,<span class="keyword">false</span>);</span><br><span class="line">            WritableCellFormat cellformat_title = <span class="keyword">new</span>   WritableCellFormat(title);</span><br><span class="line">            cellformat_title.setAlignment(Alignment.CENTRE);            </span><br><span class="line">            <span class="comment">//小标题</span></span><br><span class="line">            WritableFont sub_title = <span class="keyword">new</span> WritableFont(WritableFont.createFont(<span class="string">"新细明体"</span>),<span class="number">12</span>,WritableFont.BOLD,<span class="keyword">false</span>);</span><br><span class="line">            WritableCellFormat cellfornat_subtitle = <span class="keyword">new</span> WritableCellFormat(sub_title);</span><br><span class="line">            cellfornat_subtitle.setAlignment(Alignment.CENTRE);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">//左对齐</span></span><br><span class="line">            WritableCellFormat cellformat_left = <span class="keyword">new</span> WritableCellFormat(sub_title);</span><br><span class="line">            cellformat_left.setAlignment(Alignment.LEFT);</span><br><span class="line">            <span class="comment">//右对齐</span></span><br><span class="line">            WritableCellFormat cellformat_right = <span class="keyword">new</span> WritableCellFormat(detail);</span><br><span class="line">            cellformat_right.setAlignment(Alignment.RIGHT);</span><br><span class="line">            <span class="comment">//存储格样式,保留两位小数</span></span><br><span class="line">            NumberFormat scale2format = <span class="keyword">new</span> NumberFormat(<span class="string">"#0.00"</span>);</span><br><span class="line">            WritableCellFormat numbercellformat_scale2 = <span class="keyword">new</span> WritableCellFormat(detail,scale2format);            </span><br><span class="line">            numbercellformat_scale2.setAlignment(Alignment.RIGHT);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">//表头</span></span><br><span class="line">            sheet.mergeCells(<span class="number">0</span>, num, <span class="number">14</span>, num);</span><br><span class="line">            sheet.addCell( <span class="keyword">new</span> jxl.write.Label( <span class="number">0</span>, num, <span class="string">"报  价  单  查  询"</span>, cellformat_title ) ) ;</span><br><span class="line">            num ++;</span><br><span class="line">            <span class="comment">//表头</span></span><br><span class="line">            sheet.mergeCells(<span class="number">0</span>, num, <span class="number">14</span>, num);</span><br><span class="line">            sheet.addCell(<span class="keyword">new</span> jxl.write.Label(<span class="number">0</span>, num, <span class="string">"当前查询条件:"</span>, cellformat_left));</span><br><span class="line">            num ++;</span><br><span class="line">........</span><br><span class="line"></span><br><span class="line">           <span class="comment">//资料(居中对齐)</span></span><br><span class="line">            sheet.addCell(<span class="keyword">new</span> jxl.write.Label(<span class="number">0</span>, num, form.getQuoid(),cellformat));</span><br><span class="line">          <span class="comment">//右对齐</span></span><br><span class="line">          sheet.addCell(<span class="keyword">new</span> jxl.write.Number(<span class="number">1</span>, num, Integer.parseInt(quom), cellformat_right));</span><br><span class="line">          <span class="comment">//保留两位小数点的数字存储格</span></span><br><span class="line">          sheet.addCell(<span class="keyword">new</span> jxl.write.Number(<span class="number">5</span>, num, Double.valueOf(avgm).doubleValue(), numbercellformat_scale2));</span><br><span class="line">          <span class="comment">//粉红色文字的存储格</span></span><br><span class="line">          sheet.addCell(<span class="keyword">new</span> jxl.write.Label(<span class="number">9</span>, ++ num, stonename, pinkcellformat));</span><br><span class="line"></span><br><span class="line">          <span class="comment">//写入</span></span><br><span class="line">            workbook.write();</span><br><span class="line">            <span class="comment">//关闭</span></span><br><span class="line">            workbook.close();</span><br><span class="line">            <span class="comment">//传回</span></span><br><span class="line">            <span class="keyword">return</span> baos.toByteArray();</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+
+<p>加下下面这段JSP代码就完整了,你要作的就是修改一下上面那个java类的具体内容,直接调用下面这个jsp就可以了</p>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><span class="line">&lt;%--</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * &lt;P&gt; Title:导出excel         	 	&lt;/P&gt;</span></span><br><span class="line"><span class="comment"> * &lt;P&gt; Description:导出excel        	&lt;/P&gt;</span></span><br><span class="line"><span class="comment"> * &lt;P&gt; Copyright:Copyright (c)   	&lt;/P&gt;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 一只蚂蚁       </span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 0.2  Original Design from design document.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> */</span> </span><br><span class="line">--%&gt;</span><br><span class="line">&lt;%<span class="meta">@page</span> contentType=<span class="string">"application/octet-stream; charset=UTF-8"</span>%&gt;</span><br><span class="line">&lt;%<span class="meta">@page</span> <span class="keyword">import</span>=<span class="string">"java.sql.*,java.lang.*,java.text.*,java.util.*,java.io.*"</span>%&gt;</span><br><span class="line">&lt;%      </span><br><span class="line"></span><br><span class="line"> <span class="comment">//缓存不清除(否则文件址直接开启时会出现找不到文件的例外,不可省略)   </span></span><br><span class="line"> response.setHeader(<span class="string">"Pragma"</span>, <span class="string">"cache"</span>);</span><br><span class="line"> response.setHeader(<span class="string">"Cache-Control"</span>, <span class="string">"cache"</span>);</span><br><span class="line"> <span class="comment">//response.setHeader("Pragma", "no-cache");</span></span><br><span class="line"> <span class="comment">//response.setHeader("Cache-Control", "no-cache");</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">//取得语言环境</span></span><br><span class="line"> String ctylgn = ((Locale)session.getAttribute(<span class="string">"org.apache.struts.action.LOCALE"</span>)).toString();</span><br><span class="line"> String alertMes = <span class="string">""</span>;</span><br><span class="line"> <span class="comment">//如果是繁体中文</span></span><br><span class="line"> <span class="keyword">if</span> ( <span class="string">"zh_TW"</span>.equals(ctylgn) )</span><br><span class="line"> 	alertMes = <span class="string">"此档案已删除!"</span>;</span><br><span class="line"> <span class="comment">//如果是简体中文</span></span><br><span class="line"> <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="string">"zh_CN"</span>.equals(ctylgn) )</span><br><span class="line"> 	alertMes = <span class="string">"此档案已删除!"</span>;</span><br><span class="line"> <span class="comment">//如果是英文</span></span><br><span class="line"> <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="string">"en"</span>.equals(ctylgn) )</span><br><span class="line"> 	alertMes = <span class="string">"This file has been deleted!"</span>; </span><br><span class="line"></span><br><span class="line"> <span class="comment">//取得文件名</span></span><br><span class="line"> String filename = (String)request.getAttribute(<span class="string">"filename"</span>);</span><br><span class="line">  <span class="comment">//设定头部</span></span><br><span class="line"> response.setContentType(<span class="string">"application/octet-stream"</span>);</span><br><span class="line"> <span class="comment">//设定下载档案名称</span></span><br><span class="line"> response.addHeader(<span class="string">"Content-Disposition"</span>, <span class="string">"attachment;filename="</span> </span><br><span class="line"> 		+ <span class="keyword">new</span> String(filename.getBytes(), <span class="string">"ISO-8859-1"</span>));</span><br><span class="line"> <span class="comment">//取得流物件	</span></span><br><span class="line"> <span class="keyword">byte</span>[] data = (<span class="keyword">byte</span>[])request.getAttribute(<span class="string">"ExcelDATA"</span>);</span><br><span class="line"> ByteArrayInputStream in = <span class="keyword">new</span> ByteArrayInputStream(data); </span><br><span class="line"> <span class="keyword">try</span></span><br><span class="line"> &#123;	     </span><br><span class="line">	<span class="comment">//建立流传输物件</span></span><br><span class="line">	java.io.OutputStream os  = response.getOutputStream();</span><br><span class="line">	<span class="comment">//输出</span></span><br><span class="line">	<span class="keyword">int</span> read = -<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">byte</span> buf[] = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2048</span>];</span><br><span class="line">	<span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line"> 	<span class="comment">//写入</span></span><br><span class="line">	<span class="keyword">while</span> ( (read = ((InputStream)in).read(buf)) != -<span class="number">1</span> )</span><br><span class="line">	&#123;</span><br><span class="line">		os.write(buf, <span class="number">0</span>, read);</span><br><span class="line">	&#125;	 	</span><br><span class="line">	<span class="comment">//写入</span></span><br><span class="line"> 	os.flush();	</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//例外</span></span><br><span class="line"><span class="keyword">catch</span> ( Exception e )</span><br><span class="line">&#123; </span><br><span class="line"></span><br><span class="line">	e.printStackTrace();</span><br><span class="line">	System.out.println(alertMes);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//关闭</span></span><br><span class="line"><span class="keyword">finally</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//关闭</span></span><br><span class="line">	<span class="comment">//os.flush();</span></span><br><span class="line">	<span class="comment">//os.close();</span></span><br><span class="line">	in.close();</span><br><span class="line">	in = <span class="keyword">null</span>;</span><br><span class="line">	<span class="comment">//此段用于防止抛出"getOutputStream() has already been called for this response"例外</span></span><br><span class="line"> 	response.flushBuffer();</span><br><span class="line"> 	out.clear();</span><br><span class="line"> 	out = pageContext.pushBody();</span><br><span class="line">&#125;</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：需要依赖jxl.jar包，自行下载</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>jxl</tag>
+        <tag>Excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java发送EMail实现代码</title>
+    <url>/2009/10/19/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Java/mail/</url>
+    <content><![CDATA[<p>废话不多说，直接上代码：</p>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 发送邮件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> req	HTTP伺服器请求</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> HashMap 返回值	</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Exception </span></span><br><span class="line"><span class="comment"> */</span>	</span><br><span class="line"><span class="function"><span class="keyword">public</span> HashMap <span class="title">sendEmail</span><span class="params">( HttpServletRequest req )</span> 	<span class="keyword">throws</span> Exception		</span></span><br><span class="line"><span class="function"></span>&#123;			</span><br><span class="line"></span><br><span class="line">	<span class="comment">//返回值</span></span><br><span class="line">	HashMap retMap = <span class="keyword">new</span> HashMap();		</span><br><span class="line">	<span class="comment">//是否发送成功</span></span><br><span class="line">	String ok_fail = <span class="string">""</span>;</span><br><span class="line">	<span class="comment">//发送成功的邮件</span></span><br><span class="line">	String validEmail = <span class="string">""</span>;</span><br><span class="line">	<span class="comment">//发送失败的邮件 </span></span><br><span class="line">	String invalidEmail = <span class="string">""</span>;</span><br><span class="line">	<span class="comment">//路径</span></span><br><span class="line">	String severPath = <span class="string">"http://"</span> + req.getServerName() + <span class="string">":"</span> </span><br><span class="line">					  	+ req.getServerPort()+ req.getContextPath()+<span class="string">"/"</span>;		</span><br><span class="line">	<span class="comment">//图片格式</span></span><br><span class="line">	String imgStart = <span class="string">"&lt;IMG SRC='"</span> + severPath ;</span><br><span class="line">	String imgSize1 = <span class="string">"' width=220 heigh=160 &gt;"</span>;</span><br><span class="line">	String imgSize2 = <span class="string">"' width=50 heigh=50 &gt;"</span>;		</span><br><span class="line"></span><br><span class="line">	<span class="comment">//邮件以html格式发送,字符集为utf-8</span></span><br><span class="line">	String htmlStart = </span><br><span class="line">		<span class="string">"&lt;HTML&gt;&lt;meta http-equiv=Content-Type content=text/html;charset=utf-8&gt;"</span>;</span><br><span class="line">	String htmlEnd = <span class="string">"&lt;/HTML&gt;"</span>;		</span><br><span class="line"></span><br><span class="line">	<span class="comment">//取邮件服务器资料		</span></span><br><span class="line">	ResourceBundle actionDB = ResourceBundle.getBundle(<span class="string">"smtpdata"</span>);</span><br><span class="line">	String SmtpServer= actionDB.getString(<span class="string">"SmtpServer1"</span>);         </span><br><span class="line">       String smtpUser = actionDB.getString(<span class="string">"SmtpUser1"</span>); </span><br><span class="line">       String SmtpPwd = actionDB.getString(<span class="string">"SmtpPwd1"</span>); </span><br><span class="line">	<span class="comment">//经销商为空时</span></span><br><span class="line">	<span class="keyword">if</span> ( <span class="string">""</span>.equals(StringUtil.toStr(SessionUtil.getDealerId(req),<span class="string">""</span>)) )</span><br><span class="line">	&#123;</span><br><span class="line">		SmtpServer= actionDB.getString(<span class="string">"SmtpServer2"</span>);         </span><br><span class="line">        smtpUser = actionDB.getString(<span class="string">"SmtpUser2"</span>); </span><br><span class="line">        SmtpPwd = actionDB.getString(<span class="string">"SmtpPwd2"</span>); 				</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       System.out.println(<span class="string">"邮件服务器资料如下:"</span>);</span><br><span class="line">       System.out.println(<span class="string">"SmtpServer = "</span>+SmtpServer);</span><br><span class="line">       System.out.println(<span class="string">"smtpUser = "</span>+smtpUser);</span><br><span class="line">       System.out.println(<span class="string">"SmtpPwd = "</span>+SmtpPwd);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//取发送人地址</span></span><br><span class="line">	String fromEmail = StringUtil.toStr(SessionUtil.getUserEmail(req));		</span><br><span class="line">	<span class="comment">//发信人名字</span></span><br><span class="line">	String NickName = StringUtil.toStr(req.getParameter(<span class="string">"NickName"</span>));</span><br><span class="line">	<span class="comment">//取编号</span></span><br><span class="line">	String EDrfnbr = StringUtil.toStr(req.getParameter(<span class="string">"EDrfnbr"</span>));</span><br><span class="line">	<span class="comment">//是否寄定期电子邮件</span></span><br><span class="line">	String ESpaper = StringUtil.toStr(req.getParameter(<span class="string">"ESpaper"</span>));</span><br><span class="line">	<span class="comment">//取收件人地址			 </span></span><br><span class="line">	String toEmails = emailCorrect(<span class="keyword">new</span> String(req.getParameter(<span class="string">"emailList"</span>)));		</span><br><span class="line">	<span class="comment">//取信件主旨</span></span><br><span class="line">	String subject = StringUtil.toStr(req.getParameter(<span class="string">"EStitle"</span>));</span><br><span class="line">	<span class="comment">//取信件内容</span></span><br><span class="line">	String Content = <span class="keyword">new</span> String(req.getParameter(<span class="string">"EScontent"</span>)).trim();</span><br><span class="line">	<span class="comment">//取图片</span></span><br><span class="line">	String ESpic =  StringUtil.toStr(req.getParameter(<span class="string">"ESpic"</span>));</span><br><span class="line">	<span class="comment">//取个人资讯</span></span><br><span class="line">	String signature =  StringUtil.toStr(req.getParameter(<span class="string">"signature"</span>));</span><br><span class="line">	<span class="comment">//取附图</span></span><br><span class="line">	String pic = StringUtil.toStr(req.getParameter(<span class="string">"pic"</span>));</span><br><span class="line">	<span class="comment">//是否使用个人化TITLE		</span></span><br><span class="line">	String PersonalizedTitle = StringUtil.toStr</span><br><span class="line">									(req.getParameter(<span class="string">"CkbPersonalizedTitle"</span>));		</span><br><span class="line">	PersonalizedTitle = <span class="string">"on"</span>.equals(PersonalizedTitle)?<span class="string">"Y"</span>:<span class="string">"N"</span>;	</span><br><span class="line"></span><br><span class="line">	<span class="comment">//如果有图片</span></span><br><span class="line">	ESpic = <span class="string">""</span>.equals(ESpic)?<span class="string">""</span>:imgStart + ESpic +  imgSize1;</span><br><span class="line">	<span class="comment">//如果有附图		</span></span><br><span class="line">	pic = <span class="string">""</span>.equals(pic)?<span class="string">""</span>:imgStart + pic +  imgSize2;		</span><br><span class="line">	<span class="comment">//附文</span></span><br><span class="line">	String HContent =<span class="string">"&lt;BR&gt;"</span> + ESpic + <span class="string">"&lt;BR&gt;"</span> + signature + <span class="string">"&lt;BR&gt;"</span> + pic +<span class="string">"&lt;BR&gt;"</span>;				</span><br><span class="line">	<span class="comment">//取属性	</span></span><br><span class="line">	Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">	<span class="comment">//添加SMTP的服务器		</span></span><br><span class="line">	props.put(<span class="string">"mail.smtp.host"</span>, SmtpServer);</span><br><span class="line">	props.put(<span class="string">"mail.transport.protocol"</span>, <span class="string">"smtp"</span>);				</span><br><span class="line"></span><br><span class="line">	<span class="comment">//props.put("mail.smtp.connectiontimeout", "10000"); </span></span><br><span class="line">	<span class="comment">//这是延时</span></span><br><span class="line">	<span class="comment">//props.put("mail.smtp.timeout", "10000");</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//如果smtp有加验证需要在后面加上true！</span></span><br><span class="line">	props.put(<span class="string">"mail.smtp.auth"</span>, <span class="string">"true"</span>);</span><br><span class="line">	<span class="comment">// 加验证</span></span><br><span class="line">	EmailAuthenticator auth = <span class="keyword">new</span> EmailAuthenticator(smtpUser,  SmtpPwd);		 </span><br><span class="line"></span><br><span class="line">	<span class="comment">//得到session的配置文件与验证加进去</span></span><br><span class="line">	javax.mail.Session sendMailSession = </span><br><span class="line">						javax.mail.Session.getDefaultInstance(props,auth);		</span><br><span class="line"></span><br><span class="line">	<span class="comment">//需要调试可以用下面的这行代码</span></span><br><span class="line">	<span class="comment">//sendMailSession.setDebug(true);</span></span><br><span class="line">	javax.mail.internet.MimeMessage msg = </span><br><span class="line">					<span class="keyword">new</span> javax.mail.internet.MimeMessage(sendMailSession);</span><br><span class="line">	<span class="comment">//取得发送人地址</span></span><br><span class="line">	javax.mail.internet.InternetAddress fromAddress = </span><br><span class="line">					<span class="keyword">new</span> javax.mail.internet.InternetAddress(fromEmail);</span><br><span class="line">	<span class="comment">//设定发送人地址</span></span><br><span class="line">	msg.setFrom(fromAddress);		</span><br><span class="line">	<span class="comment">//设定邮件发送日期</span></span><br><span class="line">	msg.setSentDate(<span class="keyword">new</span> java.util.Date());</span><br><span class="line">	<span class="comment">//设定邮件主题</span></span><br><span class="line">	msg.setSubject( subject, <span class="string">"UTF-8"</span>);</span><br><span class="line">	<span class="comment">//建立</span></span><br><span class="line">	javax.mail.Transport transport = sendMailSession.getTransport(<span class="string">"smtp"</span>);</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;			</span><br><span class="line">		<span class="comment">//连结</span></span><br><span class="line">		transport.connect(SmtpServer, smtpUser, SmtpPwd);			</span><br><span class="line">		<span class="comment">//分解收件人地址</span></span><br><span class="line">		String[] toAddress = toEmails.split(<span class="string">","</span>);</span><br><span class="line">		System.out.println(<span class="string">"要发送的EMAIL共有: "</span> +toAddress.length +<span class="string">" 个"</span>);</span><br><span class="line">		System.out.println(<span class="string">"发送的NAME和EMAIL如下: "</span>);</span><br><span class="line">		<span class="comment">//循环发送</span></span><br><span class="line">		<span class="keyword">for</span>( <span class="keyword">int</span> i=<span class="number">0</span>; i&lt; toAddress.length; i++ )</span><br><span class="line">		&#123;					</span><br><span class="line">		    String toAddress_i = toAddress[i];			    </span><br><span class="line">		    <span class="comment">//分解姓名与email,并验证是否为email</span></span><br><span class="line">		    String[] nemail = name_email(toAddress_i);</span><br><span class="line">		    String toName_i = nemail[<span class="number">0</span>];</span><br><span class="line">		    String toEmail_i = nemail[<span class="number">1</span>];</span><br><span class="line">		    System.out.println(<span class="string">"NAME_"</span>+i+<span class="string">" : "</span>+toName_i);</span><br><span class="line">		    System.out.println(<span class="string">"EMAIL_"</span>+i+<span class="string">" : "</span>+toEmail_i);			    </span><br><span class="line">		    <span class="comment">//姓名与email相同，说明不是email地址</span></span><br><span class="line">		    <span class="keyword">if</span> ( toName_i.equals(toEmail_i) )</span><br><span class="line">		    &#123;</span><br><span class="line">		    	invalidEmail += toAddress[i];</span><br><span class="line">		    	invalidEmail += <span class="string">","</span>;</span><br><span class="line">		    &#125;</span><br><span class="line">		    <span class="comment">//如果是email地址</span></span><br><span class="line">		    <span class="keyword">else</span></span><br><span class="line">		    &#123;</span><br><span class="line">		    	<span class="comment">//加入收件地址列</span></span><br><span class="line">		    	msg.setRecipient(javax.mail.Message.RecipientType.TO,</span><br><span class="line">		    			<span class="keyword">new</span> javax.mail.internet.InternetAddress(toEmail_i));	   	</span><br><span class="line">		    	String Content_1 = <span class="string">"     "</span> + Content;			    	</span><br><span class="line">		    	<span class="comment">//如果是个人化TITLE</span></span><br><span class="line">		    	<span class="keyword">if</span> ( <span class="string">"Y"</span>.equals(PersonalizedTitle) )</span><br><span class="line">		    	&#123;</span><br><span class="line">		    		<span class="comment">//Dear &#123;收信人&#125;:</span></span><br><span class="line">		    		String Ptitle = <span class="string">"Dear "</span> + toName_i + <span class="string">":&lt;BR&gt;"</span> ;										</span><br><span class="line">		    		Content_1 = Ptitle + <span class="string">"     "</span> + Content;</span><br><span class="line">		    	&#125;					</span><br><span class="line">		    	<span class="comment">//邮件内容</span></span><br><span class="line">		    	msg.setContent(htmlStart + Content_1 + HContent + htmlEnd,</span><br><span class="line">		    							<span class="string">"text/html;charset=utf-8"</span>);</span><br><span class="line">		    	<span class="comment">// 保存</span></span><br><span class="line">		    	msg.saveChanges();				</span><br><span class="line">		    	<span class="comment">// 发送</span></span><br><span class="line">		    	<span class="keyword">try</span></span><br><span class="line">		    	&#123;			    		</span><br><span class="line">		    		transport.send(msg);</span><br><span class="line">					<span class="comment">//更新成功邮件列表</span></span><br><span class="line">		    		validEmail += toAddress[i];</span><br><span class="line">		    		validEmail += <span class="string">","</span>;					</span><br><span class="line">		    	&#125;				    	</span><br><span class="line">		    	<span class="comment">//例外(email地址不存在时)</span></span><br><span class="line">		    	<span class="keyword">catch</span> (  SendFailedException e1)</span><br><span class="line">		    	&#123;					</span><br><span class="line">		    		<span class="comment">//更新失败邮件列表</span></span><br><span class="line">		    		invalidEmail += toAddress[i];	</span><br><span class="line">		    		invalidEmail += <span class="string">","</span>;			    		</span><br><span class="line">		    	&#125;</span><br><span class="line">		    &#125;			    				</span><br><span class="line">		  &#125;</span><br><span class="line">		<span class="comment">//调整</span></span><br><span class="line">		validEmail = emailCorrect(validEmail);</span><br><span class="line">		invalidEmail = emailCorrect(invalidEmail);				</span><br><span class="line">		<span class="comment">//成功个数</span></span><br><span class="line">		<span class="keyword">int</span> validNum = <span class="string">""</span>.equals(validEmail)?<span class="number">0</span>:validEmail.split(<span class="string">","</span>).length;</span><br><span class="line">		<span class="comment">//失败个数</span></span><br><span class="line">		<span class="keyword">int</span> invalidNum = <span class="string">""</span>.equals(invalidEmail)?<span class="number">0</span>:invalidEmail.split(<span class="string">","</span>).length;</span><br><span class="line"></span><br><span class="line">		System.out.println(<span class="string">"发送成功:"</span>+validNum +<span class="string">" 个"</span>);</span><br><span class="line">	    System.out.println(<span class="string">"发送失败"</span>+invalidNum +<span class="string">" 个"</span>);</span><br><span class="line"></span><br><span class="line">		System.out.println(<span class="string">"发送成功的email:"</span>+validEmail);</span><br><span class="line">	    System.out.println(<span class="string">"发送失败的email"</span>+invalidEmail);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//如果全部失败</span></span><br><span class="line">		<span class="keyword">if</span> ( invalidNum == toAddress.length )</span><br><span class="line">		&#123;</span><br><span class="line">			ok_fail = <span class="string">"fail"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//如果有成功</span></span><br><span class="line">		<span class="keyword">else</span> 				</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//全部成功</span></span><br><span class="line">			<span class="keyword">if</span> ( validNum == toAddress.length )				</span><br><span class="line">				ok_fail = <span class="string">"ok"</span>;</span><br><span class="line">			<span class="comment">//部分成功</span></span><br><span class="line">			<span class="keyword">else</span> </span><br><span class="line">				ok_fail = <span class="string">"both"</span>;	</span><br><span class="line"></span><br><span class="line">			<span class="comment">//新增邮件发送记录</span></span><br><span class="line">			<span class="keyword">if</span> ( insertData(req ,EDrfnbr,subject,Content, ESpaper, NickName) )</span><br><span class="line">				System.out.println(<span class="string">"信件寄送记录表NS_EDM0427_SENDLOG新增成功!"</span>);</span><br><span class="line">			<span class="keyword">else</span> System.out.println(<span class="string">"信件寄送记录表NS_EDM0427_SENDLOG新增失败!"</span>);				</span><br><span class="line">		&#125;		</span><br><span class="line">	&#125;		</span><br><span class="line">	<span class="comment">//例外</span></span><br><span class="line">	<span class="keyword">catch</span>( Exception e )</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//设置返回值</span></span><br><span class="line">		ok_fail = <span class="string">"auth_fail"</span>;		</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">		<span class="keyword">throw</span> e;					</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//关闭连结,把值传回</span></span><br><span class="line">	<span class="keyword">finally</span></span><br><span class="line">	&#123;		</span><br><span class="line">		transport.close();			</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//返回值</span></span><br><span class="line">	retMap.put(<span class="string">"Mes"</span>,ok_fail);</span><br><span class="line">	retMap.put(<span class="string">"validEmail"</span>,replace(validEmail));</span><br><span class="line">	retMap.put(<span class="string">"invalidEmail"</span>,replace(invalidEmail));</span><br><span class="line">	<span class="keyword">return</span> retMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下代码是邮件验证时需用到的一个类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> MyEmailTest;</span><br><span class="line"><span class="keyword">import</span> javax.mail.PasswordAuthentication;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Administrator</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAuthenticator</span>  <span class="keyword">extends</span> <span class="title">javax</span>.<span class="title">mail</span>.<span class="title">Authenticator</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String strUser;</span><br><span class="line">    <span class="keyword">private</span> String strPwd;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyAuthenticator</span><span class="params">(String user, String password)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.strUser = user;</span><br><span class="line">      <span class="keyword">this</span>.strPwd = password;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> PasswordAuthentication <span class="title">getPasswordAuthentication</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> PasswordAuthentication(strUser, strPwd);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Email</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>正则表达式示例</title>
+    <url>/2010/02/23/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/RegExp/regexp-demo/</url>
+    <content><![CDATA[<p>自己此前有用到的一些正则表达式。</p>
+<a id="more"></a>
+
+<p>归整如下：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">HTML</span> <span class="meta-keyword">PUBLIC</span> <span class="meta-string">"-//W3C//DTD HTML 4.0 Transitional//EN"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">HTML</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">HEAD</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">TITLE</span>&gt;</span>正则表达式示例<span class="tag">&lt;/<span class="name">TITLE</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html; charset=utf-8"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">META</span> <span class="attr">NAME</span>=<span class="string">"Generator"</span> <span class="attr">CONTENT</span>=<span class="string">"EditPlus"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">META</span> <span class="attr">NAME</span>=<span class="string">"Author"</span> <span class="attr">CONTENT</span>=<span class="string">"一只蚂蚁"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">META</span> <span class="attr">NAME</span>=<span class="string">"Keywords"</span> <span class="attr">CONTENT</span>=<span class="string">"RegExp"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">META</span> <span class="attr">NAME</span>=<span class="string">"Description"</span> <span class="attr">CONTENT</span>=<span class="string">"RegExpression Demo"</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">HEAD</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">BODY</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">   待验证值:   <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">text</span> ο<span class="attr">nblur</span>=<span class="string">"TestResult.value=RegExpTest(this.value,1);"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">   验证结果:   <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">text</span> <span class="attr">id</span>=<span class="string">"TestResult"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">br</span> /&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">   待替换值:   <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">text</span> ο<span class="attr">nblur</span>=<span class="string">"ReplaceResult.value=RegExpReplace(this.value,1);"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">   替换结果:   <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">text</span> <span class="attr">id</span>=<span class="string">"ReplaceResult"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">BODY</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">HTML</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">language</span>=<span class="string">"javascript"</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span>&lt;!--</span><br><span class="line">/**</span><br><span class="line"> * 常用正则验证</span><br><span class="line"> * @param val 待验证字串</span><br><span class="line"> * @param type 验证类型</span><br><span class="line"> * 1:浮点数</span><br><span class="line"> * 2:数字</span><br><span class="line"> * 3:整数</span><br><span class="line"> * 4.字母</span><br><span class="line"> * 5:字母,下划线</span><br><span class="line"> * 6.字母,数字,下划线</span><br><span class="line"> * 7:字母,数字,下划线,不以数字开头</span><br><span class="line"> * 8:汉字</span><br><span class="line"> * 9:Email</span><br><span class="line"> * 10:URL</span><br><span class="line"> * 11:大陆身份证号码</span><br><span class="line"> * 12:台湾身份证号码</span><br><span class="line"><span class="actionscript"> * @<span class="keyword">return</span> 成功:返回<span class="literal">true</span>;失败:返回<span class="literal">false</span></span></span><br><span class="line"> **/</span><br><span class="line"><span class="actionscript"><span class="function"><span class="keyword">function</span>  <span class="title">RegExpTest</span><span class="params">(val,type)</span></span></span></span><br><span class="line">&#123;</span><br><span class="line"><span class="actionscript">	<span class="keyword">var</span> RegExpression ;</span></span><br><span class="line"><span class="actionscript">	<span class="keyword">switch</span> ( type )</span></span><br><span class="line">	&#123;</span><br><span class="line"><span class="actionscript">		<span class="comment">//浮点数(最多7位整数,三位小数)</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">1</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^-?/</span>d&#123;<span class="number">1</span>,<span class="number">7</span>&#125;(<span class="regexp">/./</span>d&#123;<span class="number">0</span>,<span class="number">3</span>&#125;)?$/;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//数字(不以0开头或为0)</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">2</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression =  <span class="regexp">/^([0]|[1-9]/</span>d*)$/;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//整数(最大7位)</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">3</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^([0]|-?[1-9]/</span>d&#123;<span class="number">0</span>,<span class="number">6</span>&#125;)$/;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;		 </span></span><br><span class="line"><span class="actionscript">		<span class="comment">//字母</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">4</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^[a-zA-Z]+$/</span>;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//字母,下划线</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">5</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^[a-zA-Z_]+$/</span>;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//字母,数字,下划线</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">6</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^[a-zA-Z0-9_]+$/</span>;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//字母,数字,下划线,不以数字开头</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">7</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^[a-zA-Z_][a-zA-Z0-9_]*$/</span>;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//汉字</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">8</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^[/u4e00-/u9fa5]+$/</span>;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//Email</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">9</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^/</span>w+@[a-zA-Z0<span class="number">-9</span>]+<span class="regexp">/.[a-zA-Z0-9]+$/</span>;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//URL</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">10</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^[a-zA-z]+:/</span><span class="comment">///[^s]*$/;</span></span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//身份证号码(大陆:15位或18位)</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">11</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^(/</span>d&#123;<span class="number">15</span>&#125;|<span class="regexp">/d&#123;18&#125;)$/</span>;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line"><span class="actionscript">		<span class="comment">//身份证号码(台湾)</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">12</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^[A-Z][1-2]/</span>d&#123;<span class="number">7</span>&#125;/d$/;			</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line">	</span><br><span class="line">	&#125; 	</span><br><span class="line">	</span><br><span class="line"><span class="actionscript">	<span class="comment">//not undefined</span></span></span><br><span class="line"><span class="actionscript">	<span class="keyword">if</span> ( <span class="keyword">typeof</span>(RegExpression) != <span class="string">'undefined'</span> )</span></span><br><span class="line">	&#123;</span><br><span class="line"><span class="actionscript">		<span class="comment">//验证通过</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">return</span> RegExpression.test(val);</span></span><br><span class="line">	&#125;</span><br><span class="line"><span class="actionscript">	<span class="keyword">else</span> </span></span><br><span class="line">	&#123;</span><br><span class="line"><span class="actionscript">		alert(<span class="string">'请输入正确的校验编号!'</span>);</span></span><br><span class="line"><span class="actionscript">		<span class="keyword">return</span> <span class="literal">false</span>;</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 常用正则替换</span><br><span class="line"> * @param val 待替换字串</span><br><span class="line"> * @param type 替换类型</span><br><span class="line"> * 1:去除首尾空格</span><br><span class="line"> * 2:</span><br><span class="line"><span class="actionscript"> * @<span class="keyword">return</span> 替换后结果</span></span><br><span class="line"> **/</span><br><span class="line"><span class="actionscript"><span class="function"><span class="keyword">function</span> <span class="title">RegExpReplace</span><span class="params">(val,type)</span></span></span></span><br><span class="line">&#123;</span><br><span class="line"><span class="actionscript">	<span class="keyword">var</span> RegExpression ;</span></span><br><span class="line"><span class="actionscript">	<span class="keyword">switch</span> ( type )</span></span><br><span class="line">	&#123;</span><br><span class="line"><span class="actionscript">		<span class="comment">//首尾空格</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">case</span> <span class="number">1</span>:</span></span><br><span class="line"><span class="javascript">			RegExpression = <span class="regexp">/^/</span>s*|<span class="regexp">/s*$/g</span>;</span></span><br><span class="line"><span class="actionscript">			<span class="keyword">break</span>;</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"><span class="actionscript">	<span class="comment">//not undefined</span></span></span><br><span class="line"><span class="actionscript">	<span class="keyword">if</span> ( <span class="keyword">typeof</span>(RegExpression) != <span class="string">'undefined'</span> )</span></span><br><span class="line">	&#123;</span><br><span class="line"><span class="actionscript">		<span class="comment">//替换,返回</span></span></span><br><span class="line"><span class="actionscript">		<span class="keyword">return</span> val.replace(RegExpression,<span class="string">''</span>);</span></span><br><span class="line">	&#125;</span><br><span class="line"><span class="actionscript">	<span class="keyword">else</span> </span></span><br><span class="line">	&#123;</span><br><span class="line"><span class="actionscript">		alert(<span class="string">'请输入正确的校验编号!'</span>);</span></span><br><span class="line"><span class="actionscript">		<span class="keyword">return</span> <span class="literal">false</span>;</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br><span class="line"><span class="actionscript"><span class="comment">// --&gt;</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>正则表达式</tag>
+        <tag>RegExpression</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux下NFS安装及配置</title>
+    <url>/2015/08/21/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/nfs/nfs-config/</url>
+    <content><![CDATA[<p>如果没有装NFS服务：    </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install nfs-utils.x86_64</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<ol>
+<li><p>创建需要共享的目录，比如/nfs</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /nfs</span><br><span class="line"></span><br><span class="line">chmod 777 /nfs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置目录共享（注意括号前没有空格）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/exports </span><br><span class="line"><span class="meta">#</span><span class="bash">添加下面一行，IP地址改为自己的</span></span><br><span class="line">/nfs 192.168.6.*(rw,sync,no_root_squash)</span><br></pre></td></tr></table></figure>
+
+<p>开机启动</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chkconfig nfs on</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改配置项（server和client端都需要做）：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/idmapd.conf</span><br></pre></td></tr></table></figure>
+
+<p>把以下行取消注释：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Domain = local.domain.edu</span><br></pre></td></tr></table></figure>
+
+<p>可能需要执行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/etc/init.d/rpcidmapd restart</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动服务：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/etc/init.d/rpcbind start</span><br><span class="line"></span><br><span class="line">/etc/init.d/nfs start</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h6 id="client端："><a href="#client端：" class="headerlink" title="client端："></a>client端：</h6><ol>
+<li><p>创建相同的目录，比如/nfs</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /nfs</span><br><span class="line"></span><br><span class="line">chmod 777 /nfs</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>修改配置项（server和client端都需要做）：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/idmapd.conf</span><br></pre></td></tr></table></figure>
+
+<p>把以下行取消注释：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Domain = local.domain.edu</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加开机自动挂载：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/fstab</span><br><span class="line"><span class="meta">#</span><span class="bash"> 添加以下代码，IP地址改为自己的</span></span><br><span class="line">192.168.6.108:/nfs/   /nfs           nfs   defaults    0 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开机自动启动相关服务（centos5的启动目录不一样哦）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed -i <span class="string">'$a\/etc/init.d/rpcidmapd start'</span> /etc/rc.d/rc.local</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启查看目录是否成功挂载上</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[[root@BT1657060](mailto:root@BT1657060) nfs]# df -TH</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Filesystem        Type  Size Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/rootvg-lvroot ext4  94G 5.5G  83G  7% /</span><br><span class="line">tmpfs           tmpfs 4.2G   0 4.2G  0% /dev/shm</span><br><span class="line">/dev/sda1         ext4  102M  37M  61M 38% /boot</span><br><span class="line">/dev/mapper/rootvg-lvhome ext4  1.1G  35M 969M  4% /home</span><br><span class="line">/dev/mapper/rootvg-lvopt ext4  1.1G 351M 653M 35% /opt</span><br><span class="line">/dev/mapper/rootvg-lvtmp ext4  1.1G  35M 969M  4% /tmp</span><br><span class="line">/dev/mapper/rootvg-lvvar ext4  2.2G 234M 1.8G 12% /var</span><br><span class="line">192.168.6.108:/nfs/    nfs  178G 8.3G 161G  5% /nfs</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>NFS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>阿里云CentOS7+Nginx+Nodejs+Hexo搭建个人静态博客</title>
+    <url>/2020/04/23/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/hexo/hexo-blog-build/</url>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>2010年左右，有用当时很火的CSDN写过一阵子的博客，后来由于工作的关系，自己也懒，就一直没有更新，然后17年左右有一天突然想起来，想登录上去，发现账号密码已经丢了，折腾了很久，愣是没找回来。最近时间相对比较充裕些，就希望写些文字对自己的知识体系做下梳理记录，有个自己的博客，可以随意DIY，还是比较方便些。刚好自己名下有一台闲置的阿里云ECS服务器，度娘了一圈，发现Hexo静态博客依赖少(仅依赖node)、易部署、占用资源小、响应快、模版多、Markdown深度支持等优点，最重要的，是对程序员友好，可折腾空间大，于是有了这个博客。以下是对搭建Hexo博客过程的一个记录。</p>
+<a id="more"></a>
+
+<hr>
+<h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><h3 id="本地环境"><a href="#本地环境" class="headerlink" title="本地环境"></a>本地环境</h3><p>Windows10(64位)、Git、Nodejs、Hexo</p>
+<h3 id="阿里云环境"><a href="#阿里云环境" class="headerlink" title="阿里云环境"></a>阿里云环境</h3><p>阿里云ECS(Centos7.4 X64)、宝塔、Nginx、Git、Nodejs、Hexo</p>
+<p>通过Git实现自动化部署到云服务器上。</p>
+<hr>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><h3 id="本地WIN10搭建"><a href="#本地WIN10搭建" class="headerlink" title="本地WIN10搭建"></a>本地WIN10搭建</h3><h4 id="1-安装Git"><a href="#1-安装Git" class="headerlink" title="1. 安装Git"></a>1. 安装Git</h4><p>安装过程自行百度。</p>
+<p>安装完成后，配置git全局账号信息：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.email 'you@email.com'</span><br><span class="line">git config --global user.name "your name"</span><br></pre></td></tr></table></figure>
+
+<p>需要再生成ssh公钥，方便后面自动化部署到云服务器上：</p>
+<p>在win10任意地方，右键，点击Git Bash Here打开命令行终端，执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
+
+<p>生成的文件默认放在c:\用户\你自己的用户名.ssh\目录下。</p>
+<h4 id="2-安装Nodejs"><a href="#2-安装Nodejs" class="headerlink" title="2 安装Nodejs"></a>2 安装Nodejs</h4><p>网上下载最新版本的<a href="https://nodejs.org/en/" target="_blank" rel="noopener">Nodejs</a>，下载后直接安装即可，安装完成后打开cmd，输入node -v及npm -v，能成功输出版本号信息，就说明成功安装完Nodejs。</p>
+<h4 id="3-安装-Hexo"><a href="#3-安装-Hexo" class="headerlink" title="3 安装 Hexo"></a>3 安装 Hexo</h4><p>新建一个目录，建议不要放在C盘下，比如我的是D:\hexo-blog\myblog，打开cmd，cd到这个目录下，运行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd d:\nexo-blog\myblog</span><br><span class="line">npm install hexo-cli -g</span><br><span class="line">hexo init</span><br><span class="line">npm install</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动博客本地访问</span></span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p>上述如果一切正常，会将hexo博客发布到<a href="http://localhost:4000下，打开即可看到。">http://localhost:4000下，打开即可看到。</a></p>
+<h4 id="4-Hexo基本配置"><a href="#4-Hexo基本配置" class="headerlink" title="4 Hexo基本配置"></a>4 Hexo基本配置</h4><p>博客搭建好了，总得把博客修改成自己的内容吧，进入到打开myblog/_config.yml文件（此文件为hexo的全局配置文件，不同于下面要提到的主题中的同名文件）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Site</span></span><br><span class="line">title: 网站名称</span><br><span class="line">subtitle: ''   	#子标题</span><br><span class="line">description: '' #网站描述</span><br><span class="line">keywords:		# 关键字</span><br><span class="line">author:         #作者</span><br><span class="line">language: zh-CN #语言,这个表示中文，根据主题的支持项进行配置，具体每个主师支持哪些语言，可以参见themes/主题名/language文件夹下罗列的文件名称</span><br><span class="line">timezone: ''    # 时区，中国可以填'Asia/ShangHai'</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-配置Next主题"><a href="#5-配置Next主题" class="headerlink" title="5 配置Next主题"></a>5 配置Next主题</h4><p>hexo-next主题被认为是比较好看好用的主题，我个人也是比较中意，以下介绍下配置过程</p>
+<p>进入到myblog目录下，可以看到一个themes文件夹，这个就是存放所有主题的地方，我们先把next主题拉到本地：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next.git themes/next</span><br></pre></td></tr></table></figure>
+
+<p>打开themes/next下的_config.yml文件，修改其中的部份内容，Schemes为网站风格样式，menu为菜单列表</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ---------------------------------------------------------------</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Scheme Settings</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ---------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Schemes</span></span><br><span class="line"><span class="meta">#</span><span class="bash">scheme: Muse</span></span><br><span class="line"><span class="meta">#</span><span class="bash">scheme: Mist</span></span><br><span class="line">scheme: Pisces</span><br><span class="line"><span class="meta">#</span><span class="bash">scheme: Gemini</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Dark Mode</span></span><br><span class="line">darkmode: true</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> ---------------------------------------------------------------</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Menu Settings</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ---------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Usage: `Key: /link/ || icon`</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Key is the name of menu item. If the translation <span class="keyword">for</span> this item is available, the translated text will be loaded, otherwise the Key name will be used. Key is <span class="keyword">case</span>-senstive.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Value before `||` delimiter is the target link, value after `||` delimiter is the name of Font Awesome icon.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> When running the site <span class="keyword">in</span> a subdirectory (e.g. yoursite.com/blog), remove the leading slash from link value (/archives -&gt; archives).</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> External url should start with http:// or https://</span></span><br><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line"><span class="meta">  #</span><span class="bash">about: /about/ || fa fa-user</span></span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line"><span class="meta">  #</span><span class="bash">schedule: /schedule/ || fa fa-calendar</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">sitemap: /sitemap.xml || fa fa-sitemap</span></span><br><span class="line"><span class="meta">  #</span><span class="bash">commonweal: /404/ || fa fa-heartbeat</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，菜单默认是只有home及archives，其它几个视自己需要自行添加，添加方法如下：</p>
+<ul>
+<li><p>创建tags</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd d:\nexo-blog\myblog</span><br><span class="line">hexo new page "tags"</span><br></pre></td></tr></table></figure>
+
+<p>此时，系统会在myblog\source下创建一个tags的文件夹以下文件夹下的index.md文件，打开该文件，编辑，添加type为tags</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: All tags</span><br><span class="line">date: 2019-04-24 09:34:03</span><br><span class="line">type: "tags"</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建categories</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd d:\nexo-blog\myblog</span><br><span class="line">hexo new page "categories"</span><br></pre></td></tr></table></figure>
+
+<p>此时，系统会在myblog\source下创建一个categories的文件夹以下文件夹下的index.md文件，打开该文件，编辑，添加type为tags</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories</span><br><span class="line">date: 2019-04-24 09:34:03</span><br><span class="line">type: "categories"</span><br><span class="line">----</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>回到myblog目录下，我们需要修改一下全局的_config.yml中的主题配置项，将刚才的next主题配置进去，注意名称与themes下的目录名一定要一致，不然不会生效：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Extensions</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Plugins: https://hexo.io/plugins/</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Themes: https://hexo.io/themes/</span></span></span><br><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+
+<p>这样，next主题就算配置完成了。<code>hexo server</code>重启一下服务，就可以看到效果了。</p>
+<hr>
+<h3 id="阿里云CentOS环境搭建"><a href="#阿里云CentOS环境搭建" class="headerlink" title="阿里云CentOS环境搭建"></a>阿里云CentOS环境搭建</h3><h4 id="1-git安装配置"><a href="#1-git安装配置" class="headerlink" title="1. git安装配置"></a>1. git安装配置</h4><p>安装git</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install git</span><br></pre></td></tr></table></figure>
+
+<p>创建git账户、添加权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">adduser git</span><br><span class="line">chmod 740 /etc/sudoers</span><br><span class="line">vim /etc/sudoers</span><br></pre></td></tr></table></figure>
+
+<p>找到以下内容，并参照添加</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## Allow root to run any commands anywhere</span></span><br><span class="line">root    ALL=(ALL)     ALL</span><br><span class="line"><span class="comment">#添加此行--git权限</span></span><br><span class="line">git    ALL=(ALL)     ALL</span><br></pre></td></tr></table></figure>
+
+<p>保存退出并改回权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod 400 /etc/sudoers</span><br></pre></td></tr></table></figure>
+
+<p>设置git账户密码</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo passwd git</span><br></pre></td></tr></table></figure>
+
+<p>切换至git用户，创建<del>/.ssh文件夹和</del>/.ssh/authorized_keys文件，并赋予相应的权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">su git</span><br><span class="line">mkdir ~/.ssh</span><br><span class="line">vim ~/.ssh/authorized_keys</span><br><span class="line"><span class="comment"># 将win10中生成的公钥id_rsa.pub文件中的内容复制到authorized_keys中,保存并退出</span></span><br><span class="line">chmod 600 /home/git/.ssh/authorized_keys</span><br><span class="line">chmod 700 /home/git/.ssh</span><br></pre></td></tr></table></figure>
+
+<p>本地终端添加免密登录git用户至云服务器，在本地win10上执行以下命令后输入yes，后续只要再执行下面这条命令，就可以直接免密登录到云服务器，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -v git@服务器公网IP或服务器域名</span><br></pre></td></tr></table></figure>
+
+<p>云服务器切换回root账户，并执行以下命令，创建相应的账户</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> /var/repo为git的仓库目录</span></span><br><span class="line">mkdir /var/repo</span><br><span class="line">chown -R git:git /var/repo</span><br><span class="line">chmod -R 755 /var/repo</span><br><span class="line"><span class="meta">#</span><span class="bash"> /var/www/hexo作为网站的根目录</span></span><br><span class="line">mkdir /var/www/hexo</span><br><span class="line">chown -R git:git /var/www/hexo</span><br><span class="line">chmod -R 755 /var/www/hexo</span><br></pre></td></tr></table></figure>
+
+<p>创建一个空的Git仓库(<strong><em>myblog.git可以自己定义，注意需要与WIN10配置自动化部署时写的名称一致</em></strong>)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /var/repo</span><br><span class="line">git init --bare myblog.git</span><br></pre></td></tr></table></figure>
+
+<p>创建一个新的Git钩子，用于自动化部署</p>
+<p>在/var/repo/myblog.git下，有一个自动生成的hooks文件夹，我们需要在这里新建一个钩子文件post-receive</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /var/repo/myblog.git/hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<p>进入编辑模式，在该文件中添加以下代码，指定Git的工作树（源代码）和Git目录（配置文件等），保存退出。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">git --work-tree=/var/www/hexo --git-dir=/var/repo/myblog.git checkout -f</span><br></pre></td></tr></table></figure>
+
+<p>添加文件可执行权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chown -R git:git /var/repo/myblog.git/hooks/post-receive</span><br><span class="line">chmod +x /var/repo/myblog.git/hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<p>至此，Git仓库及自动化部署算是完全搭建好了。</p>
+<h4 id="2-安装宝塔、选配Nginx"><a href="#2-安装宝塔、选配Nginx" class="headerlink" title="2. 安装宝塔、选配Nginx"></a>2. 安装宝塔、选配Nginx</h4><p>其实我之前一直都用lnmp的，不过在试过傻瓜式的宝塔后，就种草了，安装简单、配置方便、易扩展，尤其适合一些小白型用户。以下是安装过程：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install -y wget &amp;&amp; wget -O install.sh http://download.bt.cn/install/install_6.0.sh &amp;&amp; bash install.sh</span><br></pre></td></tr></table></figure>
+
+<p>默认安装即可，完成安装后，会显示宝塔面板后台的登录地址，账号及密码。</p>
+<img src='/images/bt-panel.png' />
+
+<p>登录宝塔面板后，选配Nginx并点击安装，等待安装完成。</p>
+<p>安装完Nginx，接下来就是添加网站，点击网站-&gt;添加站点-&gt;输入域名(无域名可以输入公网IP)-&gt;PHP版本选择【纯静态】，其它默认，提交。然后进一步进入到设置-&gt;配置文件，检查下配置项，修改并保存：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"># 使用80端口，务必要完成备案才可以</span></span><br><span class="line">    listen 80;</span><br><span class="line">    <span class="comment"># server_name修改为自己的域名</span></span><br><span class="line">    server_name www.xxx.com;</span><br><span class="line">    index index.php index.html index.htm default.php default.htm default.html;</span><br><span class="line">    <span class="comment"># 网站的根目录</span></span><br><span class="line">    root /var/www/hexo;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-启动宝塔服务"><a href="#3-启动宝塔服务" class="headerlink" title="3. 启动宝塔服务"></a>3. 启动宝塔服务</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">service bt restart</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="配置自动化部署"><a href="#配置自动化部署" class="headerlink" title="配置自动化部署"></a>配置自动化部署</h3><p> 返回到本地WIN10上，通过配置hexo全局的<em>config.yml文件，实现自动化部署。</em></p>
+<p>_打开本地WIN10上的myblog文件夹，打开_config.yml文件，找到deploy：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Deployment</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Docs: https://hexo.io/docs/deployment.html</span></span></span><br><span class="line">deploy:</span><br><span class="line">  type: git  </span><br><span class="line"><span class="meta">  #</span><span class="bash"> SERVER改为自己的服务器地址，另此处的myblog.git可以自行定义，但需要与下面器配置的名称相对应</span></span><br><span class="line">  repo: git@SERVER:/var/repo/myblog.git </span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>保存并退出，返回到myblog目录，执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+
+<p>没有显示绿色说明完成了，打开浏览器，输入你的域名或IP地址，就可以看到最终的hexo博客了。</p>
+<p><strong>至此，一个属于自己的hexo博客的基础功能就都搞定了，其余DIY环节，待后续进一步研究。</strong></p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>Hexo博客搭建</tag>
+        <tag>Next主题</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSVN(CollabNet Subversion)管理员密码忘记解决方案</title>
+    <url>/2017/03/18/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/csvn/csvn-forgetpwd/</url>
+    <content><![CDATA[<p>如管理员密码忘记，重置方法如下（<strong>前提是知道任意一个普通用户的密码</strong>）：</p>
+<p><em>说明：CSVN采用的是hsqldb的数据库，没有数据库实体，而是直接写入到内存中的。</em></p>
+<a id="more"></a>
+
+<p>找到csvn安装目录，如: /home/csvn下，请严格按以下步骤进行：</p>
+<ol>
+<li><p>执行<code>./bin/csvn stop</code>  先关闭csvn服务</p>
+</li>
+<li><p>备份/data/csvn-production-hsqldb.script文件</p>
+</li>
+<li><p>修改/data/csvn-production-hsqldb.script文件，找到<code>INSERT INTO ROLE_PEOPLE VALUES(1,1)</code>语句，将你所已知的用户的主键记录，复制一条上面的语句，将后面的1改成你所已知用户对应的id。并覆盖原文件。（此步骤其实就是将你已知的用户授权超级权限）。</p>
+</li>
+<li><p>重启csvn： <code>./bin/csvn start</code></p>
+</li>
+<li><p>用你已知的用户登录，此时你这个用户就有了管理员权限。再找到用户列表中的admin，更新他的密码即可</p>
+</li>
+<li><p>保险起见，再用admin登录，把你刚才的用户的管理员权限收回即可。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>CSVN</tag>
+        <tag>SVN</tag>
+        <tag>重置密码</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Sonatype Nexus版本库升级方案</title>
+    <url>/2018/02/15/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/maven/nexus-update/</url>
+    <content><![CDATA[<h3 id="Sonatype-Nexus版本库升级"><a href="#Sonatype-Nexus版本库升级" class="headerlink" title="Sonatype Nexus版本库升级"></a>Sonatype Nexus版本库升级</h3><ol>
+<li><p>下载免费的最新版本<a href="https://www.sonatype.com/download-oss-sonatype" target="_blank" rel="noopener">Sonatpte Nexus</a></p>
+</li>
+<li><p>安装JDK1.7.0_80</p>
+</li>
+<li><p>安装Tomcat7</p>
+</li>
+<li><p>配置/etc/profile，修改其中的JAVA_HOME及CATALINA_HOME配置，<code>source /etc/profile</code>立即生效</p>
+<a id="more"></a>
+</li>
+<li><p>如原来已经安装了Nexus，注意将/root/sonatype-work/nexus下的文件做个全量备份。</p>
+</li>
+<li><p>解压缩nexus-2.14.1-01-bundle.tar.gz</p>
+<ul>
+<li>nexus-2.14.1-01/lib目录下除javax.<em>.jar及jetty-</em>.jar以外的jar包，复制到nexus-2.14.1-01/nexus/WEB-INF/lib目录下</li>
+<li>再将nexus-2.14.1-01/nexus目录copy至tomcat7的webapps目录下</li>
+</ul>
+</li>
+<li><p>启动Tomcat7</p>
+</li>
+</ol>
+<h3 id="Sonatype-Nexus管理员密码丢失"><a href="#Sonatype-Nexus管理员密码丢失" class="headerlink" title="Sonatype Nexus管理员密码丢失"></a>Sonatype Nexus管理员密码丢失</h3><ol>
+<li><p>Xshell连接上Nexus所在的服务器</p>
+</li>
+<li><p>通过<code>find / -name &#39;security.xml&#39;</code>命令，找到security.xml文件所在的目录</p>
+</li>
+<li><p><code>vim security.xml</code> 编辑该文件，将anonymous用户的权限改为admin，保存。</p>
+</li>
+<li><p>找到nexus的tomcat启动目录，并重启nexus的tomcat服务。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">userRoleMapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">userId</span>&gt;</span>anonymous<span class="tag">&lt;/<span class="name">userId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">source</span>&gt;</span>default<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">roles</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">role</span>&gt;</span>anonymous<span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">role</span>&gt;</span>repository-any-read<span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--添加该项--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">role</span>&gt;</span>nx-admin<span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">roles</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">userRoleMapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">userRoleMapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">userId</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">userId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">source</span>&gt;</span>default<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">roles</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">role</span>&gt;</span>nx-admin<span class="tag">&lt;/<span class="name">role</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">roles</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">userRoleMapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="5">
+<li><p>此时访问nexus首页，左侧看到的就是管理员的所有菜单。</p>
+<p>找到Security－＞Users－＞admin右键-&gt;Set Password，重新设置一个admin用户的密码。</p>
+<p><img src="/images/nexus-001.png" alt="nexus重置密码"></p>
+</li>
+<li><p>将原改动的security.xml文件还原，再次重新nexus的tomcat服务，此前就可以用admin账号的新密码重新正常登录了。</p>
+</li>
+</ol>
+<hr>
+<h4 id="附：Linux环境下搭建Maven个人私服"><a href="#附：Linux环境下搭建Maven个人私服" class="headerlink" title="附：Linux环境下搭建Maven个人私服"></a>附：Linux环境下搭建Maven个人私服</h4><p>参考来源：</p>
+<p><a href="http://www.tuicool.com/articles/E7ZBv2" target="_blank" rel="noopener">http://www.tuicool.com/articles/E7ZBv2</a></p>
+<p><a href="http://my.oschina.net/stevenleesmart/blog/160515" target="_blank" rel="noopener">http://my.oschina.net/stevenleesmart/blog/160515</a></p>
+<p><a href="http://blog.csdn.net/wang379275614/article/details/43940259" target="_blank" rel="noopener">http://blog.csdn.net/wang379275614/article/details/43940259</a></p>
+<p>nexus下载地址（此处选用<strong>Nexus 2.11.4-01版本</strong>）：<a href="http://www.sonatype.org/nexus/archived/#step2top" target="_blank" rel="noopener">http://www.sonatype.org/nexus/archived/#step2top</a></p>
+<p>需jdk1.7版本（此处选用<strong>jdk-7u80-linux-x64.tar.g版本</strong>）：<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html</a></p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>常用工具</category>
+      </categories>
+      <tags>
+        <tag>Nexus</tag>
+        <tag>版本升级</tag>
+        <tag>Maven私服</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL数据库定时备份归档脚本</title>
+    <url>/2020/04/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-backup/</url>
+    <content><![CDATA[<p>前些日子，朋友有个数据库出现问题，为防止后续再次出现异常无法找回数据，就让我帮忙写个数据库的自动定时备份脚本，写完了，我也顺便做个记录。</p>
+<a id="more"></a>
+
+<h3 id="自动备份脚本"><a href="#自动备份脚本" class="headerlink" title="自动备份脚本"></a>自动备份脚本</h3><ul>
+<li><p>在选定目录下编写以下文件（如放置到/home/backshell/scripts文件夹下），并命名为backupDB，内容如下，主要实现功能:</p>
+<ol>
+<li><p>通过mysqldump执行全库备份</p>
+</li>
+<li><p>删除指定天数之前的历史备份</p>
+</li>
+<li><p>将最新备份通过FTP上传到指定的备用服务器上</p>
+<!-- more -->
+
+</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#! /bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据库参数项</span></span><br><span class="line">USER=数据库用户名</span><br><span class="line">PASSWORD=数据库密码</span><br><span class="line">DATABASE1=数据库名</span><br><span class="line"><span class="comment"># 备份文件存放目录</span></span><br><span class="line">BACKUP_DIR=/data/backup/database/</span><br><span class="line"><span class="comment"># 备份日志</span></span><br><span class="line">LOGFILE=/data/backup/database/data_backup.log</span><br><span class="line"><span class="comment"># 备份档存放天数</span></span><br><span class="line">KEEPDAY=7</span><br><span class="line"></span><br><span class="line"><span class="comment"># 备份文件命名规则</span></span><br><span class="line">DATE=$(date -d <span class="string">'-1 min'</span> +%Y%m%d-%H%M)</span><br><span class="line">DUMPFILE1=<span class="variable">$DATE</span>-<span class="variable">$DATABASE1</span>.sql</span><br><span class="line">ARCHIVE1=<span class="variable">$DUMPFILE1</span>.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建备份目录</span></span><br><span class="line"><span class="keyword">if</span> [ ! -d <span class="variable">$BACKUP_DIR</span> ];             </span><br><span class="line"><span class="keyword">then</span>  </span><br><span class="line">mkdir -p <span class="string">"<span class="variable">$BACKUP_DIR</span>"</span> </span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"\n"</span> &gt;&gt; <span class="variable">$LOGFILE</span>   </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"------------------------------------"</span> &gt;&gt; <span class="variable">$LOGFILE</span>  </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"BACKUP DATE:<span class="variable">$DATE</span>"</span>&gt;&gt; <span class="variable">$LOGFILE</span>  </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"------------------------------------"</span> &gt;&gt; <span class="variable">$LOGFILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行备份</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$BACKUP_DIR</span> </span><br><span class="line">/usr/bin/mysqldump -u<span class="variable">$USER</span> -p<span class="variable">$PASSWORD</span> <span class="variable">$DATABASE1</span> &gt; <span class="variable">$DUMPFILE1</span></span><br><span class="line"><span class="keyword">if</span> [[ $? == 0 ]]; <span class="keyword">then</span> </span><br><span class="line">tar czvf <span class="variable">$ARCHIVE1</span> <span class="variable">$DUMPFILE1</span> &gt;&gt; <span class="variable">$LOGFILE</span> 2&gt;&amp;1                </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"<span class="variable">$ARCHIVE1</span> BACKUP SUCCESSFUL!"</span> &gt;&gt; <span class="variable">$LOGFILE</span>  </span><br><span class="line">mv <span class="variable">$ARCHIVE1</span> <span class="variable">$BACKUP_DIR</span></span><br><span class="line">rm -f <span class="variable">$DUMPFILE1</span> </span><br><span class="line"><span class="keyword">else</span>  </span><br><span class="line"><span class="built_in">echo</span> “<span class="variable">$ARCHIVE1</span> Backup Fail!” &gt;&gt; <span class="variable">$LOGFILE</span>  </span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除KEYPDAY之前的备份档,节省空间</span></span><br><span class="line">find <span class="variable">$BACKUP_DIR</span> -<span class="built_in">type</span> f -mtime +<span class="variable">$KEEPDAY</span> -<span class="built_in">exec</span> rm -f &#123;&#125; \;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"<span class="variable">$KEEPDAY</span> DAYS AGO FILES HAS BEEN DELETE!"</span> &gt;&gt; <span class="variable">$LOGFILE</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 将备份档通过FTP传送到远程备份服务器</span></span><br><span class="line"><span class="comment"># 以下[SERVERIP]、[USER]、[password]替换为实际的远程服务器</span></span><br><span class="line"><span class="comment">#ftp -n&lt;&lt;!</span></span><br><span class="line"><span class="comment">#open [SERVERIP]</span></span><br><span class="line"><span class="comment">#user USER PASSWORD</span></span><br><span class="line"><span class="comment">#binary</span></span><br><span class="line"><span class="comment">#cd /www/wwwroot/backdir/</span></span><br><span class="line"><span class="comment">#lcd $BACKUP_DIR</span></span><br><span class="line"><span class="comment">#prompt</span></span><br><span class="line"><span class="comment">#put $ARCHIVE1</span></span><br><span class="line"><span class="comment">#close</span></span><br><span class="line"><span class="comment">#bye</span></span><br><span class="line"><span class="comment">#!</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>修改定时任务脚本，使备份自动定时执行：</p>
+<p>打开/etc/crontab文件，修改如下（添加最后一行）：</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">SHELL=/bin/bash</span><br><span class="line">PATH=/sbin:/bin:/usr/sbin:/usr/bin</span><br><span class="line">MAILTO=root</span><br><span class="line"></span><br><span class="line"><span class="comment"># For details see man 4 crontabs</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Example of job definition:</span></span><br><span class="line"><span class="comment"># .---------------- minute (0 - 59)</span></span><br><span class="line"><span class="comment"># |  .------------- hour (0 - 23)</span></span><br><span class="line"><span class="comment"># |  |  .---------- day of month (1 - 31)</span></span><br><span class="line"><span class="comment"># |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...</span></span><br><span class="line"><span class="comment"># |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat</span></span><br><span class="line"><span class="comment"># |  |  |  |  |</span></span><br><span class="line"><span class="comment"># *  *  *  *  * user-name  command to be executed</span></span><br><span class="line">05 00 * * * root /home/bakshell/script/backupDB <span class="comment">#每天凌晨0点01分执行数据库备份脚本</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="加密处理"><a href="#加密处理" class="headerlink" title="加密处理"></a>加密处理</h3><p>由于上述脚本中存在明文的账号密码等信息，存在一定的安全隐患，对 shell脚本进行加密就很必要了，下面用一种最简单的方式，gzexe工具。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 加密</span></span><br><span class="line">gzexe backupDB</span><br><span class="line"><span class="comment"># 解密</span></span><br><span class="line">gzexe -d backupDB</span><br></pre></td></tr></table></figure>
+
+<p>加密之后，会在同级目录生成一个~backpuDB的文件，该文件是原始的文件，而backupDB会被加密成密文件文件，打开会是一系列打乱后的编码。可以将~backupDB文件删除。这样可以应付一般的安全性需要了。</p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>定时备份</tag>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL常见问题处理</title>
+    <url>/2013/06/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-faq/</url>
+    <content><![CDATA[<h4 id="MySQL安装完成后，远程无法访问，报1045错误"><a href="#MySQL安装完成后，远程无法访问，报1045错误" class="headerlink" title="MySQL安装完成后，远程无法访问，报1045错误"></a>MySQL安装完成后，远程无法访问，报1045错误</h4><p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql &gt; use mysql;</span><br><span class="line">mysql &gt; update user set password&#x3D;PASSWORD(&quot;new password&quot;) WHERE USER&#x3D;&quot;root&quot;;</span><br><span class="line">mysql &gt; flush privileges;</span><br><span class="line">mysql &gt; update user set host&#x3D;&quot;%&quot; where user&#x3D;&quot;root&quot; and host&#x3D;&quot;localhost&quot;;</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h4 id="ROOT密码忘记"><a href="#ROOT密码忘记" class="headerlink" title="ROOT密码忘记"></a>ROOT密码忘记</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 输入以下命令,</span><br><span class="line"># 表示mysqld_safe进程存在,可以通过以下命令删除</span><br><span class="line">$ mysqld_safe --user&#x3D;mysql --skip-grant-tables --skip-networking &amp;</span><br><span class="line"># 登录</span><br><span class="line">$ mysql -u root mysql</span><br><span class="line"># 修改为新的密码</span><br><span class="line">mysql&gt; UPDATE user SET password&#x3D;PASSWORD(&quot;new password&quot;) WHERE user&#x3D;&#39;root&#39;;</span><br><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+<p>如果在执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ mysqld_safe --user&#x3D;mysql --skip-grant-tables --skip-networking &amp;</span><br></pre></td></tr></table></figure>
+
+<p>出现类似<code>mysqld_safe A mysqld process already exists</code>的提示，则可以通过下述命令先停止mysqld_safe进程</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看mysqld_safe进程ID</span></span><br><span class="line">ps -A|grep mysql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 终结该进程,xxxx替换为上面查出来的进程号</span></span><br><span class="line">kill -9 xxxx</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="设置MySQL随机自启动"><a href="#设置MySQL随机自启动" class="headerlink" title="设置MySQL随机自启动"></a>设置MySQL随机自启动</h4><ol>
+<li><p>确保/etc/rc.d/init.d/mysql存在</p>
+<p>若用service mysql start能够正常启动，表示服务已存在(若是通过rpm方式安装的，相应服务会自动在/etc/rc.d/init.d目录注册的)</p>
+</li>
+<li><p>检查在所有linux运行级别中，系统随机启动服务项的运行状态信息(on 或 off)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chkconfig --list mysql</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>若未找到,添加服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chkconfig --addd mysql</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置相应运行级别开启随机启动功能</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chkconfig --level 2345 mysql on</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启mysql服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">service mysql restart</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h4 id="rpm方式安装后，让不到-etc-my-cnf的解决方法"><a href="#rpm方式安装后，让不到-etc-my-cnf的解决方法" class="headerlink" title="rpm方式安装后，让不到/etc/my.cnf的解决方法"></a>rpm方式安装后，让不到/etc/my.cnf的解决方法</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cp /usr/share/mysql/my-medium.cnf /etc/my.cnf</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="查询MySQL中哪些表的数据量最大"><a href="#查询MySQL中哪些表的数据量最大" class="headerlink" title="查询MySQL中哪些表的数据量最大"></a>查询MySQL中哪些表的数据量最大</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql &gt; use information_schema; </span><br><span class="line">mysql&gt; select table_schema,table_name,table_rows from  tables order by table_rows desc limit 10;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="MySQL錯誤-Value-‘0000-00-00’-can-not-be-represented-as-java-sql-Date解決方法"><a href="#MySQL錯誤-Value-‘0000-00-00’-can-not-be-represented-as-java-sql-Date解決方法" class="headerlink" title="MySQL錯誤:Value ‘0000-00-00’ can not be represented as java.sql.Date解決方法"></a>MySQL錯誤:Value ‘0000-00-00’ can not be represented as java.sql.Date解決方法</h4><p>jsp+Tomcat+Mysql开发中采用ResultSet取值时,不管是采用getString()还是采用getDate(),均会抛出如标题所这样述错误，查阅</p>
+<p>是因为日期型(Date或DateTime类型)字串为’000-00-00’时,MySQL预设处理方式是抛出错误(exception).只要将jdbc数据库连接串做如下修改即可:</p>
+<p>修改前jdbc连接串为: </p>
+<p> <code>jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8&amp;amp;characterSetResults=UTF-8</code></p>
+<p>修改后jdbc连接串为:  </p>
+<p><code>jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8&amp;amp;characterSetResults=UTF-8&amp;amp;zeroDateTimeBehavior=convertToNull</code></p>
+<blockquote>
+<p>原文如下： </p>
+<p>Datetimes with all-zero components (0000-00-00 …) — These values can not be represented reliably in Java. Connector/J 3.0.x always converted them to NULL when being read from a ResultSet.<br>Connector/J 3.1 throws an exception by default when these values are encountered as this is the most correct behavior according to the JDBC and SQL standards. This behavior can be modified using the zeroDateTimeBehavior configuration property. The allowable values are:</p>
+<p>exception (the default), which throws an SQLException with an SQLState of S1009.</p>
+<p>convertToNull, which returns NULL instead of the date.</p>
+<p>round, which rounds the date to the nearest closest value which is 0001-01-01.</p>
+<p>Starting with Connector/J 3.1.7, ResultSet.getString() can be decoupled from this behavior via noDatetimeStringSync=true (the default value is false) so that you can retrieve the unaltered all-zero value as a String. It should be noted that this also precludes using any time zone conversions, therefore the driver will not allow you to enable noDatetimeStringSync and useTimezone at the same time.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>FAQ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL存储引擎简介</title>
+    <url>/2010/04/15/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql/mysql-engine/</url>
+    <content><![CDATA[<p>MySQL 支持多个存储引擎作为对不同表的类型的处理器,存储引擎有:MyISAM、InnoDB、MEMERY(HEAP)、BDB(BerkeleyDB)、EXAMPLE、FEDERATED、ARCHIVE、CSV、BLACKHOLE.可分为处理事务安全表的引擎和处理非事务安全表的引擎.</p>
+<a id="more"></a>
+
+<p>一、处理非事务安全表的引擎<br>1.MyISAM:提供高速存储和检索以及全文搜索的功能,是MySQL默认的插件式存储引擎,它在Web、数据仓储和其他应用环境下最常使用的存储引擎之一.通过更改STORAGE_ENGINE配置变量,能够方便地更改MySQL服务器的默认存储引擎.<br>2.MEMORY:提供”内存中”表.已被正式确认为HEAP引擎.将所有数据保存在RAM中,在需要快速查找引用和其他类似数据的环境下,可以提供极快的访问速度.<br>3:MERGE:允许集合将被处理同样的MyISAM表作为一个单独的表.允许MySQL DBA或开发人员将一系列等同的MyISAM表以逻辑方式组合在一起,并作为一个对象引用它们,对于诸如数据仓储等VLDB环境十分适合.<br>4.EXAMPLE:是一个”存根”引擎,可以用这个引擎创建表,但没有数据被存储于其中或从其中检索,这个引擎的目的在于服务.<br>5:NDB Cluster:是被MySQL Cluster用来实现分割到多台计算机的表的存储引擎.它在MySQL-Max5.1二进制分发版里提供.<br>这个存储引擎当前只被Linux,Solaris和Max OS X支持.在未来的MySQL分发版中,也将添加Windows对它的支持.适合于具用高性能查找要求的应用程序,这类查找需求还要求具有最高的正常工作时间可可用性.<br>6:ARCHIVE:用来无索引地,非常小覆盖存储的大量数据.为大量很少引用的历史、归档、或安全审计信息的存储和检索提供了完美的解决方案.<br>7:CVS:把数据以逗号分隔的格式存储在文本文件中.<br>8:BLACKHOLE:接受但不存储数,并且检索总是返回一个空集.<br>9:FEDERATED:所数据存在远程数据库中.在MySQL5.1中,它只和MySQL一起工作,使用MySQL Client API.在未来的分发版中,<br>它将使用其它驱动器或客户端连接方法连接到另外的数据源.能够将多个分离的MySQL服务器连接起来,从多个物理服务器创建一个逻辑数据库.十分适合于分布式环境或数据集市环境.</p>
+<p>二、处理事务安全表的引擎<br>1.InnoDB:默认被包含在所有MySQL5.1二进制分发版里,可以通过配置MySQL来允许或禁止任一引擎.用于事务处理应用程序,具有众多特性,包括ACID事务支持.<br>2.BDB(BerkeleyDB):默认被包含在为支持它的操作系统发布的MySQL-Max二进制分发版里.实际应用中可以替代InnoDB的事务引擎,支持Commit,Rollback和其他事务特性.</p>
+<p>三、如何更换这些引擎<br>1.全局修改:最简单的方法就是更改服务器配置,直接将其设定成所需要的引擎,在windows下可以通过更改服务器安装目录下的mysql.ini中的default-storage-engine项即可.<br>2.表格修改:还有另外一种更灵活的配置方法,就是按表来设置引擎.这样可能把那些需要用到事务处理的表设置成InnoDB,其他的设置成MyISAM,可将其性能提升到极致,设置方法如下:<br> a.建表时添加扩展语句 <code>Create TABLE A .... ENGINE=InnoDB</code><br> b.建表后,可以使用Alter语句进行修改:<code>Alter TABEL [表格名] ENGINE=InnoDB;</code> 不清楚当前数据库中各表的引擎时可以使用<code>SHOW TABLE STATUS FROM DBNAME</code> 查看.</p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle常见问题</title>
+    <url>/2009/08/29/%E6%95%B0%E6%8D%AE%E5%BA%93/oracle/oracle-faq/</url>
+    <content><![CDATA[<h1 id="Oracle监听器Oracleoracle9iTNSListener无法启动解决办法"><a href="#Oracle监听器Oracleoracle9iTNSListener无法启动解决办法" class="headerlink" title="Oracle监听器Oracleoracle9iTNSListener无法启动解决办法"></a>Oracle监听器Oracleoracle9iTNSListener无法启动解决办法</h1><p><strong>可能原因:</strong> 计算机改了名称,导致监听器监听位置出错.<br><strong>解决方法:</strong> 找到oracle home下面的network/admin/listener.ora文件,修改Host为你目前计算机的名称或直接改为ip地址.</p>
+<a id="more"></a>
+
+<h1 id="ORACLE进程无法KILL处理方案"><a href="#ORACLE进程无法KILL处理方案" class="headerlink" title="ORACLE进程无法KILL处理方案"></a>ORACLE进程无法KILL处理方案</h1><p>ORACLE进程被KILL之后，状态被置为”KILLED”，但是锁定的资源长时间不释放，会出现类似下面这样的错误提示：</p>
+<p><code>ORA-00030: User session ID does not exist</code></p>
+<p>或</p>
+<p><code>ORA-00031: session marked for kill</code></p>
+<p>以往大多都是通过重启数据库的方式来强行释放锁资源。<br>现提供另一种方式解决该问题，在ORACLE中KILL不掉，在OS系统中再杀，操作方式如下：</p>
+<ol>
+<li><p>查看哪些对象被锁</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT DISTINCT t2.username,t2.sid,t2.serial#,t2.logon_time</span><br><span class="line">from v$locked_object t1,v$session t2</span><br><span class="line">where t1.session_id&#x3D;t2.sid order by t2.logon_time;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看对应执行的是哪一个SQL语句(会提示输入SID参数，就是上一步查询出来 的SID)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select sql_text from v$session a,v$sqltext_with_newlines b</span><br><span class="line">  where DECODE(a.sql_hash_value, 0, prev_hash_value, sql_hash_value)&#x3D;b.hash_value</span><br><span class="line">  and a.sid&#x3D;&amp;sid order by piece;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>杀死对应的进程(上述的sid与serial#参数传入)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alter system kill session &#39;sid,serial#&#39;;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<p>上述步骤完成之后，若还是无法释放对应的资源，进行下一步操作：</p>
+<ol start="4">
+<li><p>取得语句的进程号</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select spid,osuser,s.program from v$session s,v$process p</span><br><span class="line">where s.paddr&#x3D;p.addr and s.sid&#x3D;&amp;sid;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在OS级别中杀死该进程<br>a. unix系统，以root身份执行以下命令</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">kill -9 &amp;spid #(即第4步查询出来的进程号spid)</span><br></pre></td></tr></table></figure>
+
+<pre><code>b.  windows系统，用orakill命令执行，语法为:</code></pre><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">orakill  sid thread</span><br></pre></td></tr></table></figure>
+
+<p>sid: oracle实例名<br>thread 线程号，即第4步中的spid<br>例如：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">c:&gt; orakill orcl <span class="number">12345</span></span><br></pre></td></tr></table></figure>
+
+<p> 上述直至第4步，都是在oracle中执行的，第5步是在操作系统(服务端，非客户端)中执行的</p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>FAQ</tag>
+        <tag>Oracle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Oracle彻底卸载及安装</title>
+    <url>/2009/08/23/%E6%95%B0%E6%8D%AE%E5%BA%93/oracle/oracle-install/</url>
+    <content><![CDATA[<h3 id="Oracle卸载步骤："><a href="#Oracle卸载步骤：" class="headerlink" title="Oracle卸载步骤："></a>Oracle卸载步骤：</h3><ol>
+<li><p>停止Oracle所有服务</p>
+<p>方法：开始–&gt;设定–&gt;控制台–&gt;系统管理工具–&gt;服务–&gt;停止所有Oracle服务</p>
+</li>
+<li><p>运行Oracle Universal Installer卸载Oracel</p>
+<a id="more"></a>
+</li>
+<li><p>修改注册表，入入regedit注册表，删除以下三个目录下所有以Oracle开头的文件</p>
+<ul>
+<li><p>Oracle软件有关关键值<code>HKEY_LOCAL_MACHINE/SOFTWARE/</code></p>
+</li>
+<li><p>Oracle服务</p>
+<p><code>HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Services/</code></p>
+</li>
+<li><p>Oracle事件日志</p>
+<p><code>HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Services/Eventlog/Application/</code></p>
+</li>
+</ul>
+</li>
+<li><p>删除系统目录</p>
+<p><code>C:/Programe files/Oracle</code></p>
+</li>
+<li><p>删除环境变量</p>
+<p>删除path环境变量中所有跟Oracle相关的资料</p>
+</li>
+<li><p>删除程序菜单项</p>
+</li>
+<li><p>删除Oracle工作主目录（系统重启后）</p>
+</li>
+</ol>
+<h3 id="Oracle安装步骤"><a href="#Oracle安装步骤" class="headerlink" title="Oracle安装步骤"></a>Oracle安装步骤</h3><p>待补充。</p>
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Oracle</tag>
+        <tag>卸载</tag>
+        <tag>安装</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server常见问题</title>
+    <url>/2009/11/23/%E6%95%B0%E6%8D%AE%E5%BA%93/sqlserver/sqlserver-faq/</url>
+    <content><![CDATA[<h4 id="SQL-Server查詢某个表既定字段的约束值"><a href="#SQL-Server查詢某个表既定字段的约束值" class="headerlink" title="SQL Server查詢某个表既定字段的约束值"></a>SQL Server查詢某个表既定字段的约束值</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Declare @Table VARCHAR(100)</span><br><span class="line">Declare @Column VARCHAR(100)</span><br><span class="line">--这里接收表名及字段名</span><br><span class="line">SET @Table&#x3D;&#39;表名&#39;</span><br><span class="line">SET @Column&#x3D;&#39;字段名&#39;</span><br><span class="line">IF Len(@Table)&gt;0 AND Len(@Column)&gt;0 </span><br><span class="line">Begin</span><br><span class="line">set @Table&#x3D;&#39;dbo.&#39; + @Table</span><br><span class="line">select object_name(constid) Constraint_Name from sysconstraints sc</span><br><span class="line">join syscolumns sm on sc.id &#x3D; sm.id and sc.colid &#x3D; sm.colid</span><br><span class="line">where sc.id &#x3D; object_id(@Table) and sm.name &#x3D;@Column </span><br><span class="line">and sc.status | 5 &#x3D; sc.status</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>体系</category>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>FAQ</tag>
+        <tag>SQL Server</tag>
+      </tags>
+  </entry>
+</search>
